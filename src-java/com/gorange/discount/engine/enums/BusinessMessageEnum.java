@@ -309,8 +309,6 @@ public enum BusinessMessageEnum {
     MESSAGE_1314("business_message_1314", "1314", "计算商品条件属性中金额表达式key对应的金额数据不可为null"),
     /** 计算商品条件验证 金额表达式key对应的金额数据不合规范 **/
     MESSAGE_1315("business_message_1315", "1315", "计算商品条件属性中金额表达式key对应的金额数据不合规范"),
-    /** 计算商品条件验证 数量/金额表达式必须设置一种 **/
-    MESSAGE_1316("business_message_1316", "1316", "计算商品条件属性中数量/金额表达式只能设置一种"),
 
     /** 当前交易校验 商户编码数据不可为Bank **/
     MESSAGE_1400("business_message_1400", "1400", "当前交易商户编码数据不可为Bank"),
@@ -340,16 +338,6 @@ public enum BusinessMessageEnum {
     MESSAGE_1602("business_message_1602", "1602", "计算商品属性中计算商品条件不可为null"),
     /** 计算商品验证 计算商品条件数据不可为Empty **/
     MESSAGE_1603("business_message_1603", "1603", "计算商品属性中计算商品条件数据不可为Empty"),
-    /** 计算商品验证 计算商品所有分类数据必须一致 **/
-    MESSAGE_1604("business_message_1604", "1604", "计算商品属性中计算商品所有分类数据必须一致"),
-    /** 计算商品验证 计算商品所有条码数据必须一致 **/
-    MESSAGE_1605("business_message_1605", "1605", "计算商品属性中计算商品所有条码数据必须一致"),
-    /** 计算商品验证 计算商品所有单价数据必须一致 **/
-    MESSAGE_1606("business_message_1606", "1606", "计算商品属性中计算商品所有单价数据必须一致"),
-    /** 计算商品验证 计算商品所有金额数据必须一致 **/
-    MESSAGE_1607("business_message_1607", "1607", "计算商品属性中计算商品所有金额数据必须一致"),
-    /** 计算商品验证 计算商品所有数量数据必须一致 **/
-    MESSAGE_1608("business_message_1608", "1608", "计算商品属性中计算商品所有数量数据必须一致"),
 
     /** 折扣分组校验 折扣分组编号数据不可为Bank **/
     MESSAGE_1700("business_message_1700", "1700", "折扣分组编号数据不可为Bank"),

@@ -303,13 +303,13 @@ public class CalcConditionGoodsCalcGoodsConditionUtils {
             amountEmpty = true;
         }
         if(quantityEmpty&&amountEmpty){
-            log.info("计算商品条件属性(金额)验证 数量/金额表达式必须设置一种");
+            log.info("计算商品条件属性(数量和金额逻辑)验证 数量/金额表达式必须设置一种");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1312);
             return false;
         }
         if(!quantityEmpty&&!amountEmpty){
-            log.info("计算商品条件属性(金额)验证 数量/金额表达式只能设置一种");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1316);
+            log.info("计算商品条件属性(数量和金额逻辑)验证 数量/金额表达式只能设置一种");
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1312);
             return false;
         }
         return true;

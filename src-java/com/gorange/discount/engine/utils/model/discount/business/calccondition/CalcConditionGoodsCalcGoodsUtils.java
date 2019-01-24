@@ -90,42 +90,7 @@ public class CalcConditionGoodsCalcGoodsUtils {
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1603);
             return false;
         }
-        Map<String,Double> price = null;
-        Map<String,List<String>> groupNo = null;
-        Map<String,List<String>> barcode = null;
-        Map<String,Double> amount = null;
-        Map<String,Double> quantity = null;
         for(CalcConditionGoodsCalcGoodsCondition calcConditionGoodsCalcGoodsCondition:calcConditionGoodsCalcGoods.getCondition()){
-            if(groupNo!=null&&!groupNo.equals(calcConditionGoodsCalcGoodsCondition.getGroupNo())){
-                log.info("计算商品类(计算商品条件)验证 计算商品所有分类数据必须一致");
-                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1604);
-                return false;
-            }
-            if(barcode!=null&&!barcode.equals(calcConditionGoodsCalcGoodsCondition.getBarcode())){
-                log.info("计算商品类(计算商品条件)验证 计算商品所有条码数据必须一致");
-                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1605);
-                return false;
-            }
-            if(price!=null&&!price.equals(calcConditionGoodsCalcGoodsCondition.getPrice())){
-                log.info("计算商品类(计算商品条件)验证 计算商品所有单价数据必须一致");
-                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1606);
-                return false;
-            }
-            if(amount!=null&&!amount.equals(calcConditionGoodsCalcGoodsCondition.getAmount())){
-                log.info("计算商品类(计算商品条件)验证 计算商品所有金额数据必须一致");
-                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1607);
-                return false;
-            }
-            if(quantity!=null&&!quantity.equals(calcConditionGoodsCalcGoodsCondition.getQuantity())){
-                log.info("计算商品类(计算商品条件)验证 计算商品所有数量数据必须一致");
-                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1608);
-                return false;
-            }
-            price = calcConditionGoodsCalcGoodsCondition.getPrice();
-            groupNo = calcConditionGoodsCalcGoodsCondition.getGroupNo();
-            barcode = calcConditionGoodsCalcGoodsCondition.getBarcode();
-            quantity = calcConditionGoodsCalcGoodsCondition.getQuantity();
-            amount = calcConditionGoodsCalcGoodsCondition.getAmount();
             log.debug("开始计算商品条件属性验证");
             boolean valid = CalcConditionGoodsCalcGoodsConditionUtils.validAllParam(calcConditionGoodsCalcGoodsCondition, businessMessage);
             log.debug("完成计算商品条件属性验证{}",valid);

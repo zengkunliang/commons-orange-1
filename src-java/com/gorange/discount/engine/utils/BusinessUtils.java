@@ -514,9 +514,6 @@ public class BusinessUtils {
             CalcConditionGoodsTargetGoods calcConditionGoodsTargetGoods = conditionGoods.getTargetGoods();
 
             List<Goods> targetGoodsList = GoodsUtils.getDiscTargetGoodsByTicket(currentTicket,discount,calcConditionGoodsTargetGoods);
-            if(targetGoodsList!=null&&!targetGoodsList.isEmpty()){
-                break;
-            }
 
             int joinDiscCount = BusinessUtils.getTicketJoinDiscountCount(conditionGoodsInfoMap,calcConditionGoodsCalcGoods);
             if(joinDiscCount>0){
@@ -1001,7 +998,6 @@ public class BusinessUtils {
                     if(!joinGoodsBarcodeList.contains(goods.getBarcode())){
                         joinGoodsBarcodeList.add(goods.getBarcode());
                     }
-                    break;
                 }
             }
         }
