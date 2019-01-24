@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact name="commons-discount:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/commons_discount_jar</output-path>
+    <root id="root">
+      <element id="archive" name="commons-discount.jar">
+        <element id="directory" name="META-INF">
+          <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
+        </element>
+        <element id="module-output" name="commons-discount" />
+      </element>
+      <element id="library" level="project" name="Maven: commons-lang:commons-lang:2.1" />
+      <element id="library" level="project" name="Maven: log4j:log4j:1.2.17" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-log4j12:1.7.22" />
+      <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.22" />
+    </root>
+  </artifact>
+</component>
