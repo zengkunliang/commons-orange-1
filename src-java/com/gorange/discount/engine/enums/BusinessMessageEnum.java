@@ -68,7 +68,6 @@ public enum BusinessMessageEnum {
     MESSAGE_0205("business_message_0205", "0205", "折扣商户编码数据不合规范"),
     /** 折扣校验 分组数据不可为null **/
     MESSAGE_0206("business_message_0206", "0206", "折扣分组数据不可为null"),
-
     /** 折扣校验 唯一标识数据不合规范 **/
     MESSAGE_0208("business_message_0208", "0208", "折扣唯一标识数据不合规范"),
     /** 折扣校验 名称数据不合规范 **/

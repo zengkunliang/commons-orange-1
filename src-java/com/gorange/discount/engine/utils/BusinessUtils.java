@@ -98,13 +98,12 @@ public class BusinessUtils {
                 }
 
                 log.info("折扣【{}】数据验证通过,开始计算折扣",discount.getUniqueNo());
-                BusinessUtils.calcDiscountResult(discount);
+                if(!BusinessUtils.calcDiscountResult(discount)){
+                    continue;
+                }
 
                 log.info("折扣【{}】计算完成，整合当前交易数据",discount.getUniqueNo());
-                BusinessUtils.reorganizeCurrentTicketInfo(currentTicket,discount.getCurrentTicket());
-
-                log.info("折扣【{}】整合当前交易数据完成,原始金额【{}】折扣金额【{}】最终金额【{}】",discount.getUniqueNo(),currentTicket.getOriginalAmount(),currentTicket.getDiscAmount(),currentTicket.getFinalAmount());
-
+                BusinessUtils.reorganizeCurrentTicketInfo(discount,currentTicket,discount.getCurrentTicket());
             }
         }
     }
@@ -143,7 +142,9 @@ public class BusinessUtils {
         resultDetail.setGoodsResultList(goodsResultList);
 
         discountResult.setDiscResultDetail(resultDetail);
-        log.info("包装交易【{}】折扣结果完成,原始金额【{}】折扣金额【{}】最终金额【{}】",currentTicket.getOrderNo(),currentTicket.getOriginalAmount(),currentTicket.getDiscAmount(),currentTicket.getFinalAmount());
+        log.info("包装交易【{}】折扣结果完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",
+                currentTicket.getOrderNo(),currentTicket.getOriginalAmount(),currentTicket.getDiscAmount(),currentTicket.getDiscPoint()
+                ,currentTicket.getDiscIntegral(),currentTicket.getDiscStamp(),currentTicket.getFinalAmount());
     }
 
     /**
@@ -482,8 +483,10 @@ public class BusinessUtils {
     /**
      * 计算折扣结果
      * @param discount          折扣数据
+     * @return 有目标商品且计算过折扣则返回true 否则返回false
      */
-    private static void calcDiscountResult(Discount discount){
+    private static boolean calcDiscountResult(Discount discount){
+        boolean joinCalc = false;
         CurrentTicket currentTicket = discount.getCurrentTicket();
         DiscountCalcCondition discountCalcCondition = discount.getDiscountCalcCondition();
         List<CalcConditionGoods> conditionGoodsList = discountCalcCondition.getCondition().getConditionGoods();
@@ -499,10 +502,13 @@ public class BusinessUtils {
             if(targetGoodsList!=null&&!targetGoodsList.isEmpty()){
                 int joinDiscCount = BusinessUtils.getTicketJoinDiscountCount(conditionGoodsInfoMap,calcConditionGoodsCalcGoods);
                 if(joinDiscCount>0){
-                    BusinessUtils.calcTicketJoinDiscountValue(joinDiscCount,currentTicket,targetGoodsList,discount,calcConditionGoodsTargetGoods);
+                    if(BusinessUtils.calcTicketJoinDiscountValue(joinDiscCount,currentTicket,targetGoodsList,discount,calcConditionGoodsTargetGoods)){
+                        joinCalc = true;
+                    }
                 }
             }
         }
+        return joinCalc;
     }
 
     /**
@@ -640,16 +646,17 @@ public class BusinessUtils {
      * @param targetGoodsList               目标商品集
      * @param discount                      折扣数据
      * @param calcConditionGoodsTargetGoods 目标商品表达式对象
+     * @return 有目标商品且计算过折扣则返回true 否则返回false
      */
-    private static void calcTicketJoinDiscountValue(int joinDiscCount, CurrentTicket currentTicket, List<Goods> targetGoodsList, Discount discount, CalcConditionGoodsTargetGoods calcConditionGoodsTargetGoods){
-
+    private static boolean calcTicketJoinDiscountValue(int joinDiscCount, CurrentTicket currentTicket, List<Goods> targetGoodsList, Discount discount, CalcConditionGoodsTargetGoods calcConditionGoodsTargetGoods){
+        boolean joinCalc = false;
         //合计目标商品总金额
         double totalJoinCalGoodsAmount = 0D;
         for (Goods goods : targetGoodsList) {
             totalJoinCalGoodsAmount += goods.getFinalAmount();
         }
 
-        if(!targetGoodsList.isEmpty()){
+        if(targetGoodsList!=null&&!targetGoodsList.isEmpty()){
             //商品排序
             if(CalcGoodsSortTypeEnum.DESC.name().equals(calcConditionGoodsTargetGoods.getSortType())){
                 GoodsUtils.sortGoodsByPrice(targetGoodsList,true);
@@ -666,13 +673,14 @@ public class BusinessUtils {
             double singleDiscountMaxValue = BusinessUtils.getSingleDiscountMaxValue(discount);
 
             if(discGoodsCount<0){
-                BusinessUtils.calcTicketJoinDiscountValueByAll(discGoodsCount,joinDiscCount,discValue,calcResultType,singleDiscountMaxValue,currentTicket,discount,targetGoodsList);
+                joinCalc = BusinessUtils.calcTicketJoinDiscountValueByAll(discGoodsCount,joinDiscCount,discValue,calcResultType,singleDiscountMaxValue,currentTicket,discount,targetGoodsList);
             }else if(discGoodsCount==0){
-                BusinessUtils.calcTicketJoinDiscountValueByApportion(discGoodsCount,joinDiscCount,discValue,calcResultType,singleDiscountMaxValue,totalJoinCalGoodsAmount,currentTicket,discount,targetGoodsList);
+                joinCalc = BusinessUtils.calcTicketJoinDiscountValueByApportion(discGoodsCount,joinDiscCount,discValue,calcResultType,singleDiscountMaxValue,totalJoinCalGoodsAmount,currentTicket,discount,targetGoodsList);
             }else if(discGoodsCount>0){
-                BusinessUtils.calcTicketJoinDiscountValueByAppointCount(discGoodsCount,joinDiscCount,discValue,calcResultType,singleDiscountMaxValue,currentTicket,discount,targetGoodsList);
+                joinCalc = BusinessUtils.calcTicketJoinDiscountValueByAppointCount(discGoodsCount,joinDiscCount,discValue,calcResultType,singleDiscountMaxValue,currentTicket,discount,targetGoodsList);
             }
         }
+        return joinCalc;
     }
 
     /**
@@ -685,8 +693,10 @@ public class BusinessUtils {
      * @param currentTicket                 当前交易
      * @param discount                      折扣数据
      * @param targetGoodsList               目标商品集
+     * @return 有目标商品且计算过折扣则返回true 否则返回false
      */
-    private static void calcTicketJoinDiscountValueByAll(int discGoodsCount,int joinDiscCount, double discValue, String calcResultType, double singleDiscountMaxValue, CurrentTicket currentTicket, Discount discount, List<Goods> targetGoodsList){
+    private static boolean calcTicketJoinDiscountValueByAll(int discGoodsCount,int joinDiscCount, double discValue, String calcResultType, double singleDiscountMaxValue, CurrentTicket currentTicket, Discount discount, List<Goods> targetGoodsList){
+        boolean joinCalc = false;
         if(discGoodsCount<0&&!targetGoodsList.isEmpty()){
             double sumDiscountValue = 0;
             int rounding = currentTicket.getRounding();
@@ -694,11 +704,11 @@ public class BusinessUtils {
             for (Goods goods : targetGoodsList) {
                 int goodsDiscCount = 1;
                 int quantity = goods.getCaclQuantity();
-                int goodsDiscCaclCount;
+                int goodsDiscCalcCount;
                 if(joinDiscCount>=quantity){
-                    goodsDiscCaclCount = quantity;
+                    goodsDiscCalcCount = quantity;
                 }else{
-                    goodsDiscCaclCount = joinDiscCount;
+                    goodsDiscCalcCount = joinDiscCount;
                 }
 
                 GoodsDiscountResult goodsDiscountResult = null;
@@ -707,11 +717,11 @@ public class BusinessUtils {
                     double goodsDiscAmount = goodsDiscValue;
                     goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
                 }else if(DiscountCalcResultTypeEnum.AMOUNT.name().equals(calcResultType)){
-                    double goodsDiscValue = Math.min(goods.getFinalAmount(),NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.mul(goodsDiscCaclCount,discValue)));
+                    double goodsDiscValue = Math.min(goods.getFinalAmount(),NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.mul(goodsDiscCalcCount,discValue)));
                     double goodsDiscAmount = goodsDiscValue;
                     goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
                 }else if(DiscountCalcResultTypeEnum.RATE.name().equals(calcResultType)){
-                    double goodsDiscValue = Math.min(goods.getFinalAmount(),NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.mul(goodsDiscCaclCount,NumberUtils.mul(goods.getFinalAmount(),discValue))));
+                    double goodsDiscValue = Math.min(goods.getFinalAmount(),NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.mul(goodsDiscCalcCount,NumberUtils.mul(goods.getFinalAmount(),discValue))));
                     double goodsDiscAmount = goodsDiscValue;
                     goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
                 }else if(DiscountCalcResultTypeEnum.POINT.name().equals(calcResultType)
@@ -722,22 +732,28 @@ public class BusinessUtils {
                     goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
                 }
                 if(goodsDiscountResult!=null){
-                    if(singleDiscSumAmount<singleDiscountMaxValue){
-                        sumDiscountValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.add(NumberUtils.add(sumDiscountValue,singleDiscSumAmount),goodsDiscountResult.getDiscValue()));
-                        if(sumDiscountValue>singleDiscountMaxValue){
-                            double goodsDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(singleDiscountMaxValue,singleDiscSumAmount));
-                            goodsDiscountResult.setDiscValue(goodsDiscValue);
-                            if(goodsDiscountResult.getDiscAmount()!=0){
-                                goodsDiscountResult.setDiscAmount(goodsDiscValue);
-                            }
-                        }
-                        CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket).getDiscResultList().add(goodsDiscountResult);
+                    if(singleDiscSumAmount>=singleDiscountMaxValue){
+                        break;
                     }
+                    sumDiscountValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.add(NumberUtils.add(sumDiscountValue,singleDiscSumAmount),goodsDiscountResult.getDiscValue()));
+                    if(sumDiscountValue>singleDiscountMaxValue){
+                        double goodsDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(singleDiscountMaxValue,singleDiscSumAmount));
+                        goodsDiscountResult.setDiscValue(goodsDiscValue);
+                        if(goodsDiscountResult.getDiscAmount()!=0){
+                            goodsDiscountResult.setDiscAmount(goodsDiscValue);
+                        }
+                    }
+                    CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket).getDiscResultList().add(goodsDiscountResult);
+                    joinCalc = true;
                 }
             }
-            //重新定义当前交易金额信息
-            currentTicket.resetTicketAmountInfo();
+
+            if(joinCalc){
+                //重新定义当前交易金额信息
+                currentTicket.resetTicketAmountInfo();
+            }
         }
+        return joinCalc;
     }
 
     /**
@@ -751,8 +767,10 @@ public class BusinessUtils {
      * @param currentTicket                 当前交易
      * @param discount                      折扣数据
      * @param targetGoodsList               目标商品集
+     * @return 有目标商品且计算过折扣则返回true 否则返回false
      */
-    private static void calcTicketJoinDiscountValueByApportion(int discGoodsCount,int joinDiscCount, double discValue, String calcResultType, double singleDiscountMaxValue, double totalJoinCalGoodsAmount, CurrentTicket currentTicket, Discount discount, List<Goods> targetGoodsList){
+    private static boolean calcTicketJoinDiscountValueByApportion(int discGoodsCount,int joinDiscCount, double discValue, String calcResultType, double singleDiscountMaxValue, double totalJoinCalGoodsAmount, CurrentTicket currentTicket, Discount discount, List<Goods> targetGoodsList){
+        boolean joinCalc = false;
         if(discGoodsCount==0&&!targetGoodsList.isEmpty()){
             int rounding = currentTicket.getRounding();
 
@@ -772,7 +790,7 @@ public class BusinessUtils {
                 if(singDiscSumAmount<singleDiscountMaxValue){
                     totalDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(singleDiscountMaxValue,singDiscSumAmount));
                 }else{
-                    return;
+                    return joinCalc;
                 }
             }
 
@@ -802,40 +820,44 @@ public class BusinessUtils {
                 }
                 if(goodsDiscountResult!=null){
                     CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket).getDiscResultList().add(goodsDiscountResult);
+                    joinCalc = true;
                 }
             }
 
-            //重新定义当前交易金额信息
-            currentTicket.resetTicketAmountInfo();
+            if(joinCalc){
+                //重新定义当前交易金额信息
+                currentTicket.resetTicketAmountInfo();
 
-            //补入差额的折扣值
-            if(sumDiscValue<totalDiscValue){
-                int goodsDiscCount = 0;
-                for(Goods goods:targetGoodsList){
-                    GoodsDiscountResult goodsDiscountResult = null;
-                    Goods ticketGoods = CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket);
-                    if(DiscountCalcResultTypeEnum.AMOUNT.name().equals(calcResultType)
-                            ||DiscountCalcResultTypeEnum.QUANTITY.name().equals(calcResultType)
-                            ||DiscountCalcResultTypeEnum.RATE.name().equals(calcResultType)){
-                        double singleDiscGoodsSumAmount = BusinessUtils.getGoodsDiscountAmountByDiscUniqueNo(rounding,discount.getUniqueNo(),goods);
-                        double goodsAmount = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.add(ticketGoods.getFinalAmount(),singleDiscGoodsSumAmount));
-                        double goodsDiscValue = Math.min(goodsAmount,NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(totalDiscValue,sumDiscValue)));
-                        double goodsDiscAmount = goodsDiscValue;
-                        goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
-                    }else if(DiscountCalcResultTypeEnum.POINT.name().equals(calcResultType)
-                            ||DiscountCalcResultTypeEnum.STAMP.name().equals(calcResultType)
-                            ||DiscountCalcResultTypeEnum.INTEGRAL.name().equals(calcResultType)){
-                        double goodsDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(totalDiscValue,sumDiscValue));
-                        double goodsDiscAmount = 0;
-                        goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
-                    }
-                    if(goodsDiscountResult!=null){
-                        ticketGoods.getDiscResultList().add(goodsDiscountResult);
-                        break;
+                //补入差额的折扣值
+                if(sumDiscValue<totalDiscValue){
+                    int goodsDiscCount = 0;
+                    for(Goods goods:targetGoodsList){
+                        GoodsDiscountResult goodsDiscountResult = null;
+                        Goods ticketGoods = CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket);
+                        if(DiscountCalcResultTypeEnum.AMOUNT.name().equals(calcResultType)
+                                ||DiscountCalcResultTypeEnum.QUANTITY.name().equals(calcResultType)
+                                ||DiscountCalcResultTypeEnum.RATE.name().equals(calcResultType)){
+                            double singleDiscGoodsSumAmount = BusinessUtils.getGoodsDiscountAmountByDiscUniqueNo(rounding,discount.getUniqueNo(),goods);
+                            double goodsAmount = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.add(ticketGoods.getFinalAmount(),singleDiscGoodsSumAmount));
+                            double goodsDiscValue = Math.min(goodsAmount,NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(totalDiscValue,sumDiscValue)));
+                            double goodsDiscAmount = goodsDiscValue;
+                            goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
+                        }else if(DiscountCalcResultTypeEnum.POINT.name().equals(calcResultType)
+                                ||DiscountCalcResultTypeEnum.STAMP.name().equals(calcResultType)
+                                ||DiscountCalcResultTypeEnum.INTEGRAL.name().equals(calcResultType)){
+                            double goodsDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(totalDiscValue,sumDiscValue));
+                            double goodsDiscAmount = 0;
+                            goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
+                        }
+                        if(goodsDiscountResult!=null){
+                            ticketGoods.getDiscResultList().add(goodsDiscountResult);
+                            break;
+                        }
                     }
                 }
             }
         }
+        return joinCalc;
     }
 
     /**
@@ -848,8 +870,10 @@ public class BusinessUtils {
      * @param currentTicket                 当前交易
      * @param discount                      折扣数据
      * @param targetGoodsList               目标商品集
+     * @return 有目标商品且计算过折扣则返回true 否则返回false
      */
-    private static void calcTicketJoinDiscountValueByAppointCount(int discGoodsCount,int joinDiscCount, double discValue, String calcResultType, double singleDiscountMaxValue, CurrentTicket currentTicket, Discount discount, List<Goods> targetGoodsList){
+    private static boolean calcTicketJoinDiscountValueByAppointCount(int discGoodsCount,int joinDiscCount, double discValue, String calcResultType, double singleDiscountMaxValue, CurrentTicket currentTicket, Discount discount, List<Goods> targetGoodsList){
+        boolean joinCalc = false;
         if(discGoodsCount>0&&!targetGoodsList.isEmpty()){
             double sumDiscountValue = 0;
             int rounding = currentTicket.getRounding();
@@ -888,34 +912,41 @@ public class BusinessUtils {
                     double goodsDiscAmount = 0;
                     goodsDiscountResult = new GoodsDiscountResult(discount,goodsDiscValue,goodsDiscAmount,goodsDiscCount);
                 }
+                if(goodsDiscountResult!=null){
+                    if(singleDiscSumAmount>=singleDiscountMaxValue){
+                        break;
+                    }
+                    sumDiscountValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.add(NumberUtils.add(sumDiscountValue,singleDiscSumAmount),goodsDiscountResult.getDiscValue()));
+                    if(sumDiscountValue>singleDiscountMaxValue){
+                        double goodsDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(singleDiscountMaxValue,singleDiscSumAmount));
+                        goodsDiscountResult.setDiscValue(goodsDiscValue);
+                        if(goodsDiscountResult.getDiscAmount()!=0){
+                            goodsDiscountResult.setDiscAmount(goodsDiscValue);
+                        }
+                    }
+                    CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket).getDiscResultList().add(goodsDiscountResult);
+                    joinCalc = true;
+                }
                 if(joinDiscCount==0){
                     break;
                 }
-                if(goodsDiscountResult!=null){
-                    if(singleDiscSumAmount<singleDiscountMaxValue){
-                        sumDiscountValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.add(NumberUtils.add(sumDiscountValue,singleDiscSumAmount),goodsDiscountResult.getDiscValue()));
-                        if(sumDiscountValue>singleDiscountMaxValue){
-                            double goodsDiscValue = NumberUtils.FormatDouble.formatValue(rounding,NumberUtils.sub(singleDiscountMaxValue,singleDiscSumAmount));
-                            goodsDiscountResult.setDiscValue(goodsDiscValue);
-                            if(goodsDiscountResult.getDiscAmount()!=0){
-                                goodsDiscountResult.setDiscAmount(goodsDiscValue);
-                            }
-                        }
-                        CurrentTicketUtils.getGoodsByLineNo(goods.getLineNo(),currentTicket).getDiscResultList().add(goodsDiscountResult);
-                    }
-                }
             }
-            //重新定义当前交易金额信息
-            currentTicket.resetTicketAmountInfo();
+
+            if(joinCalc){
+                //重新定义当前交易金额信息
+                currentTicket.resetTicketAmountInfo();
+            }
         }
+        return joinCalc;
     }
 
     /**
      * 整合当前交易信息
+     * @param discount              折扣对象
      * @param currentTicket         当前交易
      * @param tempCurrentTicket     折扣对象中临时当前交易
      */
-    private static void reorganizeCurrentTicketInfo(CurrentTicket currentTicket,CurrentTicket tempCurrentTicket){
+    private static void reorganizeCurrentTicketInfo(Discount discount,CurrentTicket currentTicket,CurrentTicket tempCurrentTicket){
         for(Goods tempGoods:tempCurrentTicket.getGoodsList()){
             Goods goods = CurrentTicketUtils.getGoodsByLineNo(tempGoods.getLineNo(),currentTicket);
             goods.getDiscResultList().clear();
@@ -926,6 +957,9 @@ public class BusinessUtils {
             }
         }
         currentTicket.resetTicketAmountInfo();
+        log.info("折扣【{}】整合当前交易数据完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",
+                discount.getUniqueNo(),currentTicket.getOriginalAmount(),currentTicket.getDiscAmount(),currentTicket.getDiscPoint()
+                ,currentTicket.getDiscIntegral(),currentTicket.getDiscStamp(),currentTicket.getFinalAmount());
     }
 
     /**

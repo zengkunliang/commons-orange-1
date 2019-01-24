@@ -20,12 +20,10 @@ import java.util.TimeZone;
  */
 public class DateUtils {
     private static Logger log = LoggerFactory.getLogger(DateUtils.class);
-
     /**
      * 北京时区
      */
     public static final String CN_TIME_ZONE = "GMT+08:00";
-
     /**
      * UTC格式字串常量 Z
      */
@@ -34,7 +32,6 @@ public class DateUtils {
      * UTC格式字串常量 "UTC"
      */
     public static final String UTC_CONSTANTS_UTC = " UTC";
-
     /**
      * 毫秒
      */
