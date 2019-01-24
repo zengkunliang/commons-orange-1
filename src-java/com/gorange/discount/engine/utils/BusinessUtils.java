@@ -99,11 +99,20 @@ public class BusinessUtils {
 
                 log.info("折扣【{}】数据验证通过,开始计算折扣",discount.getUniqueNo());
                 if(!BusinessUtils.calcDiscountResult(discount)){
+                    log.info("折扣【{}】整合当前交易数据完成，交易未能参与该折扣",discount.getUniqueNo());
                     continue;
                 }
 
-                log.info("折扣【{}】计算完成，整合当前交易数据",discount.getUniqueNo());
-                BusinessUtils.reorganizeCurrentTicketInfo(discount,currentTicket,discount.getCurrentTicket());
+                BusinessUtils.reorganizeCurrentTicketInfo(currentTicket,discount.getCurrentTicket());
+                List<Object> paramList = new ArrayList<>();
+                paramList.add(discount.getUniqueNo());
+                paramList.add(currentTicket.getOriginalAmount());
+                paramList.add(currentTicket.getDiscAmount());
+                paramList.add(currentTicket.getDiscPoint());
+                paramList.add(currentTicket.getDiscIntegral());
+                paramList.add(currentTicket.getDiscStamp());
+                paramList.add(currentTicket.getFinalAmount());
+                log.info("折扣【{}】整合当前交易数据完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",paramList.toArray());
             }
         }
     }
@@ -142,9 +151,16 @@ public class BusinessUtils {
         resultDetail.setGoodsResultList(goodsResultList);
 
         discountResult.setDiscResultDetail(resultDetail);
-        log.info("包装交易【{}】折扣结果完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",
-                currentTicket.getOrderNo(),currentTicket.getOriginalAmount(),currentTicket.getDiscAmount(),currentTicket.getDiscPoint()
-                ,currentTicket.getDiscIntegral(),currentTicket.getDiscStamp(),currentTicket.getFinalAmount());
+
+        List<Object> paramList = new ArrayList<>();
+        paramList.add(currentTicket.getOrderNo());
+        paramList.add(currentTicket.getOriginalAmount());
+        paramList.add(currentTicket.getDiscAmount());
+        paramList.add(currentTicket.getDiscPoint());
+        paramList.add(currentTicket.getDiscIntegral());
+        paramList.add(currentTicket.getDiscStamp());
+        paramList.add(currentTicket.getFinalAmount());
+        log.info("包装交易【{}】折扣结果完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",paramList.toArray());
     }
 
     /**
@@ -498,13 +514,14 @@ public class BusinessUtils {
             CalcConditionGoodsTargetGoods calcConditionGoodsTargetGoods = conditionGoods.getTargetGoods();
 
             List<Goods> targetGoodsList = GoodsUtils.getDiscTargetGoodsByTicket(currentTicket,discount,calcConditionGoodsTargetGoods);
-
             if(targetGoodsList!=null&&!targetGoodsList.isEmpty()){
-                int joinDiscCount = BusinessUtils.getTicketJoinDiscountCount(conditionGoodsInfoMap,calcConditionGoodsCalcGoods);
-                if(joinDiscCount>0){
-                    if(BusinessUtils.calcTicketJoinDiscountValue(joinDiscCount,currentTicket,targetGoodsList,discount,calcConditionGoodsTargetGoods)){
-                        joinCalc = true;
-                    }
+                break;
+            }
+
+            int joinDiscCount = BusinessUtils.getTicketJoinDiscountCount(conditionGoodsInfoMap,calcConditionGoodsCalcGoods);
+            if(joinDiscCount>0){
+                if(BusinessUtils.calcTicketJoinDiscountValue(joinDiscCount,currentTicket,targetGoodsList,discount,calcConditionGoodsTargetGoods)){
+                    joinCalc = true;
                 }
             }
         }
@@ -942,11 +959,10 @@ public class BusinessUtils {
 
     /**
      * 整合当前交易信息
-     * @param discount              折扣对象
      * @param currentTicket         当前交易
      * @param tempCurrentTicket     折扣对象中临时当前交易
      */
-    private static void reorganizeCurrentTicketInfo(Discount discount,CurrentTicket currentTicket,CurrentTicket tempCurrentTicket){
+    private static void reorganizeCurrentTicketInfo(CurrentTicket currentTicket,CurrentTicket tempCurrentTicket){
         for(Goods tempGoods:tempCurrentTicket.getGoodsList()){
             Goods goods = CurrentTicketUtils.getGoodsByLineNo(tempGoods.getLineNo(),currentTicket);
             goods.getDiscResultList().clear();
@@ -957,9 +973,6 @@ public class BusinessUtils {
             }
         }
         currentTicket.resetTicketAmountInfo();
-        log.info("折扣【{}】整合当前交易数据完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",
-                discount.getUniqueNo(),currentTicket.getOriginalAmount(),currentTicket.getDiscAmount(),currentTicket.getDiscPoint()
-                ,currentTicket.getDiscIntegral(),currentTicket.getDiscStamp(),currentTicket.getFinalAmount());
     }
 
     /**
