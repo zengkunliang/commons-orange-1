@@ -114,6 +114,9 @@ public class BusinessUtils {
                 paramList.add(currentTicket.getFinalAmount());
                 log.info("折扣【{}】整合当前交易数据完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",paramList.toArray());
             }
+        }else{
+            //重新定义当前交易金额信息
+            currentTicket.resetTicketAmountInfo();
         }
     }
 
