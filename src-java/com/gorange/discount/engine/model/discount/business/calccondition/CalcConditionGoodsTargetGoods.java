@@ -35,7 +35,7 @@ public class CalcConditionGoodsTargetGoods implements Serializable {
     private String sortType;
     /**
      * 一共几件商品发生折扣 默认:0<br>
-     * 小于0:所有可参与折扣商品全部发生折扣 等于0:且将折扣分摊到左右可参与折扣的商品上 大于0:在几件商品上发生折扣<br>
+     * 小于0:所有可参与折扣商品全部发生折扣 等于0:且将折扣分摊到所有可参与折扣的商品上 大于0:在几件商品上发生折扣<br>
      * 上面描述的折扣解释为:折扣值*可以参与折扣次数
      */
     private Integer discGoodsCount;
