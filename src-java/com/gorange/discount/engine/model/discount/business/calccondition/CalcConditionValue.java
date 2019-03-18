@@ -28,14 +28,14 @@ public class CalcConditionValue implements Serializable {
      */
     private Map<String,Double> memberMaxDiscValue;
     /**
-     * 商户最大折扣值
+     * 公司最大折扣值
      * key必须匹配ExpressionKeyEnum中的数据
      *      key只能是EQ
      * key有正确有效的值时,value不可为null
      * value数据必须大于0
      * value数据必须大于或等于memberMaxDiscAmount value数据
      */
-    private Map<String,Double> merchantMaxDiscValue;
+    private Map<String,Double> companyMaxDiscValue;
 
     /**
      * 获取ticketMaxDiscValue属性值
@@ -76,21 +76,21 @@ public class CalcConditionValue implements Serializable {
     }
 
     /**
-     * 获取merchantMaxDiscValue属性值
+     * 获取companyMaxDiscValue属性值
      *
-     * @return merchantMaxDiscValue属性值
+     * @return companyMaxDiscValue属性值
      */
-    public Map<String, Double> getMerchantMaxDiscValue() {
-        return merchantMaxDiscValue;
+    public Map<String, Double> getCompanyMaxDiscValue() {
+        return companyMaxDiscValue;
     }
 
     /**
-     * 设置merchantMaxDiscValue属性值<br>
-     * 可以使用getMerchantMaxDiscValue()获取merchantMaxDiscValue的属性值
+     * 设置companyMaxDiscValue属性值<br>
+     * 可以使用getCompanyMaxDiscValue()获取companyMaxDiscValue的属性值
      *
-     * @param merchantMaxDiscValue merchantMaxDiscValue
+     * @param companyMaxDiscValue companyMaxDiscValue
      */
-    public void setMerchantMaxDiscValue(Map<String, Double> merchantMaxDiscValue) {
-        this.merchantMaxDiscValue = merchantMaxDiscValue;
+    public void setCompanyMaxDiscValue(Map<String, Double> companyMaxDiscValue) {
+        this.companyMaxDiscValue = companyMaxDiscValue;
     }
 }

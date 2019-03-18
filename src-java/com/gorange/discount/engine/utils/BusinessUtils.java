@@ -68,13 +68,13 @@ public class BusinessUtils {
     public static void filterAndCalc(CurrentTicket currentTicket, AssociatedTicket associatedTicket, List<Discount> discountList){
         if(discountList!=null&&!discountList.isEmpty()) {
 
-            String merchantNo       = currentTicket.getMerchantNo();
+            String companyNo        = currentTicket.getCompanyNo();
             Date businessTime       = currentTicket.getBusinessTime();
             String timeZone         = currentTicket.getTimeZone();
 
             for (Discount discount : discountList) {
                 log.info("折扣【{}】根据基础条件进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByBase(merchantNo,timeZone,businessTime,discount)){
+                if(!BusinessUtils.filterDiscountByBase(companyNo,timeZone,businessTime,discount)){
                     continue;
                 }
 
@@ -114,9 +114,6 @@ public class BusinessUtils {
                 paramList.add(currentTicket.getFinalAmount());
                 log.info("折扣【{}】整合当前交易数据完成,原始金额【{}】折扣金额【{}】赠送积点【{}】赠送积分【{}】赠送印花【{}】最终金额【{}】",paramList.toArray());
             }
-        }else{
-            //重新定义当前交易金额信息
-            currentTicket.resetTicketAmountInfo();
         }
     }
 
@@ -168,20 +165,20 @@ public class BusinessUtils {
 
     /**
      * 筛选顾客可参与的折扣
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param timeZone      时区
      * @param businessTime  交易时间
      * @param member        顾客对象
      * @param discountList  折扣对象集
      * @return 返回顾客可参与的折扣集
      */
-    public static List<DiscountMemo> filterTargetMemberDiscount(String merchantNo, String timeZone, Date businessTime, Member member, List<Discount> discountList){
+    public static List<DiscountMemo> filterTargetMemberDiscount(String companyNo, String timeZone, Date businessTime, Member member, List<Discount> discountList){
         List<DiscountMemo> joinDiscountList = new ArrayList<>();
 
         if(member!=null&&discountList!=null&&!discountList.isEmpty()){
             for (Discount discount : discountList) {
                 log.info("折扣【{}】根据基础条件进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByBase(merchantNo,timeZone,businessTime,discount)){
+                if(!BusinessUtils.filterDiscountByBase(companyNo,timeZone,businessTime,discount)){
                     continue;
                 }
 
@@ -202,20 +199,20 @@ public class BusinessUtils {
 
     /**
      * 筛选商品可参与的折扣
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param timeZone      时区
      * @param businessTime  交易时间
      * @param goodsList     商品对象集
      * @param discountList  折扣对象集
      * @return 返回商品可参与的折扣集
      */
-    public static Map<String,List<DiscountMemo>> filterTargetGoodsDiscount(String merchantNo,String timeZone,Date businessTime,List<Goods> goodsList,List<Discount> discountList){
+    public static Map<String,List<DiscountMemo>> filterTargetGoodsDiscount(String companyNo,String timeZone,Date businessTime,List<Goods> goodsList,List<Discount> discountList){
         Map<String,List<DiscountMemo>> joinDiscInfo = new LinkedHashMap<>();
 
         if(goodsList!=null&&discountList!=null&&!goodsList.isEmpty()&&!discountList.isEmpty()){
             for (Discount discount : discountList) {
                 log.info("折扣【{}】根据基础条件进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByBase(merchantNo,timeZone,businessTime,discount)){
+                if(!BusinessUtils.filterDiscountByBase(companyNo,timeZone,businessTime,discount)){
                     continue;
                 }
 
@@ -238,7 +235,7 @@ public class BusinessUtils {
 
     /**
      * 筛选顾客购买商品可参与的折扣
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param businessTime  交易时间
      * @param timeZone      时区
      * @param member        顾客对象
@@ -246,13 +243,13 @@ public class BusinessUtils {
      * @param discountList  折扣对象集
      * @return 返回顾客购买商品可参与的折扣集
      */
-    public static Map<String,List<DiscountMemo>>  filterTargetMemberAndGoodsDiscount(String merchantNo,Date businessTime,String timeZone,Member member,List<Goods> goodsList,List<Discount> discountList){
+    public static Map<String,List<DiscountMemo>>  filterTargetMemberAndGoodsDiscount(String companyNo,Date businessTime,String timeZone,Member member,List<Goods> goodsList,List<Discount> discountList){
         Map<String,List<DiscountMemo>> joinDiscInfo = new LinkedHashMap<>();
 
         if(member!=null&&discountList!=null&&!discountList.isEmpty()){
             for (Discount discount : discountList) {
                 log.info("折扣【{}】根据基础条件进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByBase(merchantNo,timeZone,businessTime,discount)){
+                if(!BusinessUtils.filterDiscountByBase(companyNo,timeZone,businessTime,discount)){
                     continue;
                 }
 
@@ -295,10 +292,12 @@ public class BusinessUtils {
                     log.info("交易顾客条码【{}】不符合折扣可参于的顾客条码【{}】",member.getBarcode(),joinConditionMember.getBarcode());
                     return false;
                 }
-                if(!CommonUtils.judgementExpression(member.getType(),joinConditionMember.getType())){
-                    log.info("交易顾客分类【{}】不符合折扣可参于的顾客分类【{}】",member.getType(),joinConditionMember.getType());
+                if(!CommonUtils.judgementExpression(member.getType(),joinConditionMember.getType())
+                        &&!CommonUtils.judgementExpression(member.getCustomType(),joinConditionMember.getType())){
+                    log.info("交易顾客分类【{}】或交易顾客自定义分类【{}】不符合折扣可参于的顾客分类【{}】",member.getType(),member.getCustomType(),joinConditionMember.getType());
                     return false;
                 }
+
                 if(!CommonUtils.judgementExpression(member.getSex(),joinConditionMember.getSex())){
                     log.info("交易顾客性别【{}】不符合折扣可参于的顾客性别【{}】",member.getSex(),joinConditionMember.getSex());
                     return false;
@@ -318,16 +317,16 @@ public class BusinessUtils {
 
     /**
      * 根据基础条件进行折扣数据过滤
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param timeZone      时区
      * @param businessTime  交易时间
      * @param discount      折扣数据
      * @return 通过基础条件验证返回true 否则返回false
      */
-    private static boolean filterDiscountByBase(String merchantNo, String timeZone, Date businessTime, Discount discount){
-        //判断商户
-        if(!StringUtils.defaultString(merchantNo).equals(discount.getMerchantNo())){
-            log.info("非当前商户[{}]折扣[{}]",discount.getMerchantNo(),discount.getUniqueNo());
+    private static boolean filterDiscountByBase(String companyNo, String timeZone, Date businessTime, Discount discount){
+        //判断公司
+        if(!StringUtils.defaultString(companyNo).equals(discount.getCompanyNo())){
+            log.info("非当前公司[{}]折扣[{}]",discount.getCompanyNo(),discount.getUniqueNo());
             return false;
         }
         //判断日期区间
@@ -380,7 +379,8 @@ public class BusinessUtils {
                 Iterator<Goods> iterator = goodsList.iterator();
                 while (iterator.hasNext()) {
                     Goods goods = iterator.next();
-                    if(!CommonUtils.judgementExpression(goods.getGroupNo(),conditionGoods.getGroupNo())){
+                    if(!CommonUtils.judgementExpression(goods.getGroupNo(),conditionGoods.getGroupNo())
+                            &&!CommonUtils.judgementExpression(goods.getCustomGroupNo(),conditionGoods.getGroupNo())){
                         log.debug("交易商品不符合折扣可参于的商品分类");
                         iterator.remove();
                         continue;
@@ -445,8 +445,8 @@ public class BusinessUtils {
      */
     private static boolean filterDiscountByAssociatedTicket(AssociatedTicket associatedTicket,JoinConditionTicketForAssociated conditionTicketForAssociated){
         if(conditionTicketForAssociated!=null){
-            if(!CommonUtils.judgementExpression(associatedTicket.getMerchantNo(),conditionTicketForAssociated.getMerchantNo())){
-                log.info("关联交易商户【{}】不符合折扣可参于的关联交易商户【{}】",associatedTicket.getMerchantNo(),conditionTicketForAssociated.getMerchantNo());
+            if(!CommonUtils.judgementExpression(associatedTicket.getCompanyNo(),conditionTicketForAssociated.getCompanyNo())){
+                log.info("关联交易公司【{}】不符合折扣可参于的关联交易公司【{}】",associatedTicket.getCompanyNo(),conditionTicketForAssociated.getCompanyNo());
                 return false;
             }
             if(!CommonUtils.judgementExpression(associatedTicket.getBusinessTime(),conditionTicketForAssociated.getTicketStartTime())){
@@ -545,7 +545,8 @@ public class BusinessUtils {
         double joinGoodsAmount = 0;
         for (CalcConditionGoodsCalcGoodsCondition calcConditionGoodsCalcGoodsCondition : calcConditionGoodsCalcGoods.getCondition()) {
             for (Goods goods : tempGoodsList) {
-                if (!CommonUtils.judgementExpression(goods.getGroupNo(), calcConditionGoodsCalcGoodsCondition.getGroupNo())) {
+                if (!CommonUtils.judgementExpression(goods.getGroupNo(), calcConditionGoodsCalcGoodsCondition.getGroupNo())
+                        &&!CommonUtils.judgementExpression(goods.getCustomGroupNo(), calcConditionGoodsCalcGoodsCondition.getGroupNo())) {
                     continue;
                 }
                 if (!CommonUtils.judgementExpression(goods.getBarcode(), calcConditionGoodsCalcGoodsCondition.getBarcode())) {
@@ -991,7 +992,8 @@ public class BusinessUtils {
             for (Goods goods : goodsList) {
                 for (CalcConditionGoods calcConditionGoods : conditionGoodsList) {
                     CalcConditionGoodsTargetGoods targetGoods = calcConditionGoods.getTargetGoods();
-                    if(!CommonUtils.judgementExpression(goods.getGroupNo(),targetGoods.getGroupNo())){
+                    if(!CommonUtils.judgementExpression(goods.getGroupNo(),targetGoods.getGroupNo())
+                            &&!CommonUtils.judgementExpression(goods.getCustomGroupNo(),targetGoods.getGroupNo())){
                         continue;
                     }
                     if(!CommonUtils.judgementExpression(goods.getBarcode(),targetGoods.getBarcode())){

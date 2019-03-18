@@ -23,11 +23,11 @@ public class JoinConditionTicketForCurrent implements Serializable {
     /**
      * 折扣交易类型
      * <pre>
-     *  MERCHANT_TICKET:        商户交易
-     *  MERCHANT_POS_TICKET:    商户下的机台交易
-     *  MERCHANT_MEMBER_TICKET: 商户下的会员交易
+     *  COMPANY_TICKET:        公司交易
+     *  COMPANY_POS_TICKET:    公司下的机台交易
+     *  COMPANY_MEMBER_TICKET: 公司下的会员交易
      * </pre>
-     * 引擎默认为【MERCHANT_TICKET】
+     * 引擎默认为【COMPANY_TICKET】
      */
     private String type;
     /**
@@ -84,7 +84,7 @@ public class JoinConditionTicketForCurrent implements Serializable {
      */
     public String getType() {
         if(StringUtils.isBlank(type)){
-            type = DiscountTicketTypeEnum.MERCHANT_TICKET.name();
+            type = DiscountTicketTypeEnum.COMPANY_TICKET.name();
         }
         return type;
     }

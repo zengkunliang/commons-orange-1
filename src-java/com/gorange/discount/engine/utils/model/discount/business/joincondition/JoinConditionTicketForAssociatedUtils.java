@@ -34,8 +34,8 @@ public class JoinConditionTicketForAssociatedUtils {
      * @return 验证通过返回true 否则false
      */
     public static boolean validAllParam(JoinConditionTicketForAssociated joinConditionTicketForAssociated, BusinessMessage businessMessage){
-        if(!JoinConditionTicketForAssociatedUtils.validParamForMerchantNo(joinConditionTicketForAssociated, businessMessage)){
-            log.debug("折扣参与条件交易参数关联交易属性(商户号)验证未通过");
+        if(!JoinConditionTicketForAssociatedUtils.validParamForCompanyNo(joinConditionTicketForAssociated, businessMessage)){
+            log.debug("折扣参与条件交易参数关联交易属性(公司号)验证未通过");
             return false;
         }
         if(!JoinConditionTicketForAssociatedUtils.validParamForTime(joinConditionTicketForAssociated, businessMessage)){
@@ -50,7 +50,7 @@ public class JoinConditionTicketForAssociatedUtils {
     }
 
     /**
-     * 折扣参与条件交易参数关联交易属性(商户号)验证
+     * 折扣参与条件交易参数关联交易属性(公司号)验证
      * <pre>
      * 验证条件:
      *      key必须匹配ExpressionKeyEnum中的数据
@@ -62,33 +62,33 @@ public class JoinConditionTicketForAssociatedUtils {
      * @param businessMessage                           消息对象
      * @return 验证通过返回true 否则false
      */
-    public static boolean validParamForMerchantNo(JoinConditionTicketForAssociated joinConditionTicketForAssociated, BusinessMessage businessMessage){
-        if(joinConditionTicketForAssociated.getMerchantNo()!=null&&!joinConditionTicketForAssociated.getMerchantNo().isEmpty()){
-            Iterator<Map.Entry<String,List<String>>> iterator = joinConditionTicketForAssociated.getMerchantNo().entrySet().iterator();
+    public static boolean validParamForCompanyNo(JoinConditionTicketForAssociated joinConditionTicketForAssociated, BusinessMessage businessMessage){
+        if(joinConditionTicketForAssociated.getCompanyNo()!=null&&!joinConditionTicketForAssociated.getCompanyNo().isEmpty()){
+            Iterator<Map.Entry<String,List<String>>> iterator = joinConditionTicketForAssociated.getCompanyNo().entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<String, List<String>> expressionMapEntry = iterator.next();
                 String expression = expressionMapEntry.getKey();
-                List<String> merchantNoList = expressionMapEntry.getValue();
+                List<String> companyNoList = expressionMapEntry.getValue();
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
-                    log.info("折扣参与条件交易参数关联交易属性(商户号)验证 商户号表达式key数据不合规范");
+                    log.info("折扣参与条件交易参数关联交易属性(公司号)验证 公司号表达式key数据不合规范");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1000);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.IN&&expressionKeyEnum!=ExpressionKeyEnum.NOT_IN){
-                    log.debug("折扣参与条件交易参数关联交易属性(商户号)验证  商户号表达式key数据不合规范");
+                    log.debug("折扣参与条件交易参数关联交易属性(公司号)验证 公司号表达式key数据不合规范");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1000);
                     return false;
                 }
-                if(merchantNoList==null){
-                    log.info("折扣参与条件交易参数关联交易属性(商户号)验证 商户号表达式key对应的商户号数据不可为null");
+                if(companyNoList==null){
+                    log.info("折扣参与条件交易参数关联交易属性(公司号)验证 公司号表达式key对应的公司号数据不可为null");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1001);
                     return false;
                 }
-                for(String merchantNo:merchantNoList){
-                    int merchantNoLength = StringUtils.defaultString(merchantNo).length();
-                    if(merchantNoLength>DiscountUtils.MERCHANT_NO_MAX_LENGTH){
-                        log.info("折扣参与条件交易参数关联交易属性(商户号)验证 商户号表达式key对应的商户号数据不合规范");
+                for(String companyNo:companyNoList){
+                    int companyNoLength = StringUtils.defaultString(companyNo).length();
+                    if(companyNoLength>DiscountUtils.COMPANY_NO_MAX_LENGTH){
+                        log.info("折扣参与条件交易参数关联交易属性(公司号)验证 公司号表达式key对应的公司号数据不合规范");
                         businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1002);
                         return false;
                     }

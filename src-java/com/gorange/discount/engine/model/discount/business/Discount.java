@@ -19,17 +19,17 @@ import java.util.List;
 public final class Discount implements Serializable {
     /**
      * 折扣唯一标识<br>
-     * 商户下唯一,未进行设置时引擎自动进行设置<br>
+     * 公司下唯一,未进行设置时引擎自动进行设置<br>
      * 不为Blank时长度区间为【1-50】
      */
     private String uniqueNo;
     /**
-     * 折扣所属商户<br>
-     * 商户的唯一标识<br>
+     * 折扣所属公司<br>
+     * 公司的唯一标识<br>
      * 不得为null 或 "" 或 " "<br>
      * 长度区间为【1-50】
      */
-    private String merchantNo;
+    private String companyNo;
     /**
      * 折扣名称<br>
      * 不为Blank时长度区间为【1-50】
@@ -73,12 +73,12 @@ public final class Discount implements Serializable {
     private List<DiscountTime> discountTimeList;
     /**
      * 折扣参与条件<br>
-     * 折扣参与条件会根据不同的场景,商户需求条件各不相同
+     * 折扣参与条件会根据不同的场景,公司需求条件各不相同
      */
     private DiscountJoinCondition discountJoinCondition;
     /**
      * 折扣计算条件<br>
-     * 折扣计算条件根据不同的场景,商户需求条件各不相同
+     * 折扣计算条件根据不同的场景,公司需求条件各不相同
      */
     private DiscountCalcCondition discountCalcCondition;
 
@@ -112,23 +112,24 @@ public final class Discount implements Serializable {
         this.uniqueNo = uniqueNo;
     }
 
+
     /**
-     * 获取merchantNo属性值
+     * 获取companyNo属性值
      *
-     * @return merchantNo属性值
+     * @return companyNo属性值
      */
-    public String getMerchantNo() {
-        return merchantNo;
+    public String getCompanyNo() {
+        return companyNo;
     }
 
     /**
-     * 设置merchantNo属性值
-     * 可以使用getMerchantNo()获取merchantNo的属性值
+     * 设置companyNo属性值<br>
+     * 可以使用getCompanyNo()获取companyNo的属性值
      *
-     * @param merchantNo merchantNo
+     * @param companyNo companyNo
      */
-    public void setMerchantNo(String merchantNo) {
-        this.merchantNo = merchantNo;
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
     }
 
     /**

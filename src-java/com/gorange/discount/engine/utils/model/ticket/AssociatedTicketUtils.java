@@ -31,11 +31,11 @@ public class AssociatedTicketUtils {
      */
     public static boolean validAllParam(AssociatedTicket associatedTicket, BusinessMessage businessMessage){
         if(associatedTicket!=null){
-            log.info("关联交易商户号: {}",associatedTicket.getMerchantNo());
+            log.info("关联交易公司: {}",associatedTicket.getCompanyNo());
             log.info("关联交易时间: {}", DateUtils.format(associatedTicket.getBusinessTime(), DateFormatTypeEnum.DATE_TIME));
             log.info("关联交易总金额: {}",associatedTicket.getTicketTotalAmount());
-            if(!AssociatedTicketUtils.validParamForMerchantNo(associatedTicket, businessMessage)){
-                log.debug("关联交易属性(商户编码)验证未通过");
+            if(!AssociatedTicketUtils.validParamForCompanyNo(associatedTicket, businessMessage)){
+                log.debug("关联交易属性(公司编码)验证未通过");
                 return false;
             }
             if(!AssociatedTicketUtils.validParamForBusinessTime(associatedTicket, businessMessage)){
@@ -51,7 +51,7 @@ public class AssociatedTicketUtils {
     }
 
     /**
-     * 关联交易属性(商户编码)验证
+     * 关联交易属性(公司编码)验证
      * <pre>
      * 验证条件:
      *      不得为null 或 "" 或 " "
@@ -61,15 +61,15 @@ public class AssociatedTicketUtils {
      * @param businessMessage   消息对象
      * @return 验证通过返回true 否则false
      */
-    public static boolean validParamForMerchantNo(AssociatedTicket associatedTicket, BusinessMessage businessMessage){
-        if(StringUtils.isBlank(associatedTicket.getMerchantNo())){
-            log.info("关联交易属性(商户编码)验证 商户编码数据不可为Bank");
+    public static boolean validParamForCompanyNo(AssociatedTicket associatedTicket, BusinessMessage businessMessage){
+        if(StringUtils.isBlank(associatedTicket.getCompanyNo())){
+            log.info("关联交易属性(公司编码)验证 公司编码数据不可为Bank");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1500);
             return false;
         }
-        int merchantNoLength = associatedTicket.getMerchantNo().length();
-        if(merchantNoLength> DiscountUtils.MERCHANT_NO_MAX_LENGTH){
-            log.info("关联交易属性(商户编码)验证 商户编码数据不合规范");
+        int companyNoLength = associatedTicket.getCompanyNo().length();
+        if(companyNoLength>DiscountUtils.COMPANY_NO_MAX_LENGTH){
+            log.info("关联交易属性(公司编码)验证 公司编码数据不合规范");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1501);
             return false;
         }

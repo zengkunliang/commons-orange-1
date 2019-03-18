@@ -12,13 +12,13 @@ import java.util.Map;
  */
 public class JoinConditionTicketForAssociated implements Serializable {
     /**
-     * 交易所属商户
+     * 交易所属公司
      * key必须匹配ExpressionKeyEnum中的数据<br>
      * key只能是IN 或 NOT_IN<br>
      * key有正确有效的值时,value不可为null<br>
      * value长度区间【1-50】
      */
-    private Map<String,List<String>> merchantNo;
+    private Map<String,List<String>> companyNo;
     /**
      * 参与交易发生的时间区间(开始时间)<br>
      * key必须匹配ExpressionKeyEnum中的数据<br>
@@ -44,22 +44,22 @@ public class JoinConditionTicketForAssociated implements Serializable {
     private Map<String,Double> ticketTotalAmount;
 
     /**
-     * 获取merchantNo属性值
+     * 获取companyNo属性值
      *
-     * @return merchantNo属性值
+     * @return companyNo属性值
      */
-    public Map<String, List<String>> getMerchantNo() {
-        return merchantNo;
+    public Map<String, List<String>> getCompanyNo() {
+        return companyNo;
     }
 
     /**
-     * 设置merchantNo属性值
-     * 可以使用getMerchantNo()获取merchantNo的属性值
+     * 设置companyNo属性值<br>
+     * 可以使用getCompanyNo()获取companyNo的属性值
      *
-     * @param merchantNo merchantNo
+     * @param companyNo companyNo
      */
-    public void setMerchantNo(Map<String, List<String>> merchantNo) {
-        this.merchantNo = merchantNo;
+    public void setCompanyNo(Map<String, List<String>> companyNo) {
+        this.companyNo = companyNo;
     }
 
     /**

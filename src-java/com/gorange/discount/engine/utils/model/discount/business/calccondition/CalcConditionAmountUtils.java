@@ -38,7 +38,7 @@ public class CalcConditionAmountUtils {
             log.debug("折扣计算条件参数金额属性(交易折扣金额)验证未通过");
             return false;
         }
-        if(!CalcConditionAmountUtils.validParamForMerchantMaxDiscAmount(calcConditionValue, businessMessage)){
+        if(!CalcConditionAmountUtils.validParamForCompanyMaxDiscAmount(calcConditionValue, businessMessage)){
             log.debug("折扣计算条件参数金额属性(交易折扣金额)验证未通过");
             return false;
         }
@@ -142,7 +142,7 @@ public class CalcConditionAmountUtils {
     }
 
     /**
-     * 折扣计算条件参数金额属性(商户最大折扣值)验证
+     * 折扣计算条件参数金额属性(公司最大折扣值)验证
      * <pre>
      * 验证条件:
      *      key必须匹配ExpressionKeyEnum中的数据
@@ -154,28 +154,28 @@ public class CalcConditionAmountUtils {
      * @param businessMessage       消息对象
      * @return 验证通过返回true 否则false
      */
-    public static boolean validParamForMerchantMaxDiscAmount(CalcConditionValue calcConditionValue, BusinessMessage businessMessage){
-        if(calcConditionValue.getMerchantMaxDiscValue()!=null&&!calcConditionValue.getMerchantMaxDiscValue().isEmpty()){
-            for(String expression: calcConditionValue.getMerchantMaxDiscValue().keySet()){
+    public static boolean validParamForCompanyMaxDiscAmount(CalcConditionValue calcConditionValue, BusinessMessage businessMessage){
+        if(calcConditionValue.getCompanyMaxDiscValue()!=null&&!calcConditionValue.getCompanyMaxDiscValue().isEmpty()){
+            for(String expression: calcConditionValue.getCompanyMaxDiscValue().keySet()){
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
-                    log.info("折扣计算条件参数最大值属性(商户最大折扣值)验证 商户最大折扣值表达式key数据不合规范");
+                    log.info("折扣计算条件参数最大值属性(公司最大折扣值)验证 公司最大折扣值表达式key数据不合规范");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1106);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.EQ){
-                    log.info("折扣计算条件参数最大值属性(商户最大折扣值)验证 商户最大折扣值表达式key数据不合规范");
+                    log.info("折扣计算条件参数最大值属性(公司最大折扣值)验证 公司最大折扣值表达式key数据不合规范");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1106);
                     return false;
                 }
-                Double merchantMaxDiscountValue = calcConditionValue.getMerchantMaxDiscValue().get(expression);
-                if(merchantMaxDiscountValue==null){
-                    log.info("折扣计算条件参数最大值属性(商户最大折扣值)验证 商户最大折扣值表达式key对应的最大值数据不可为null");
+                Double companyMaxDiscountValue = calcConditionValue.getCompanyMaxDiscValue().get(expression);
+                if(companyMaxDiscountValue==null){
+                    log.info("折扣计算条件参数最大值属性(公司最大折扣值)验证 公司最大折扣值表达式key对应的最大值数据不可为null");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1107);
                     return false;
                 }
-                if(merchantMaxDiscountValue<=0){
-                    log.info("折扣计算条件参数最大值属性(商户最大折扣值)验证 商户最大折扣值表达式key对应的最大值数据不合规范");
+                if(companyMaxDiscountValue<=0){
+                    log.info("折扣计算条件参数最大值属性(公司最大折扣值)验证 公司最大折扣值表达式key对应的最大值数据不合规范");
                     businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1108);
                     return false;
                 }
@@ -191,7 +191,7 @@ public class CalcConditionAmountUtils {
      * @return 验证通过返回true 否则false
      */
     public static boolean validParamForMaxDiscAmountLogic(CalcConditionValue calcConditionValue, BusinessMessage businessMessage){
-        Double ticketMaxDiscountValue = null,memberMaxDiscountValue = null,merchantMaxDiscountValue = null;
+        Double ticketMaxDiscountValue = null,memberMaxDiscountValue = null,companyMaxDiscountValue = null;
         if(calcConditionValue.getTicketMaxDiscValue()!=null&&!calcConditionValue.getTicketMaxDiscValue().isEmpty()){
             Iterator<Map.Entry<String,Double>> iterator = calcConditionValue.getTicketMaxDiscValue().entrySet().iterator();
             while (iterator.hasNext()) {
@@ -206,26 +206,26 @@ public class CalcConditionAmountUtils {
                 memberMaxDiscountValue = expressionMapEntry.getValue();
             }
         }
-        if(calcConditionValue.getMerchantMaxDiscValue()!=null&&!calcConditionValue.getMerchantMaxDiscValue().isEmpty()){
-            Iterator<Map.Entry<String,Double>> iterator = calcConditionValue.getMerchantMaxDiscValue().entrySet().iterator();
+        if(calcConditionValue.getCompanyMaxDiscValue()!=null&&!calcConditionValue.getCompanyMaxDiscValue().isEmpty()){
+            Iterator<Map.Entry<String,Double>> iterator = calcConditionValue.getCompanyMaxDiscValue().entrySet().iterator();
             while (iterator.hasNext()) {
                 Map.Entry<String, Double> expressionMapEntry = iterator.next();
-                merchantMaxDiscountValue = expressionMapEntry.getValue();
+                companyMaxDiscountValue = expressionMapEntry.getValue();
             }
         }
-        return CalcConditionAmountUtils.validParamForMaxDiscAmountLogic(ticketMaxDiscountValue,memberMaxDiscountValue,merchantMaxDiscountValue,businessMessage);
+        return CalcConditionAmountUtils.validParamForMaxDiscAmountLogic(ticketMaxDiscountValue,memberMaxDiscountValue,companyMaxDiscountValue,businessMessage);
     }
 
     /**
      * 折扣计算条件参数金额属性(最大折扣值逻辑)验证
      * @param ticketMaxDiscountValue       交易最大折扣金额
      * @param memberMaxDiscountValue       会员最大折扣金额
-     * @param merchantMaxDiscountValue     商户最大折扣金额
+     * @param companyMaxDiscountValue      公司最大折扣金额
      * @param businessMessage              消息对象
      * @return
      */
-    private static boolean validParamForMaxDiscAmountLogic(Double ticketMaxDiscountValue, Double memberMaxDiscountValue, Double merchantMaxDiscountValue, BusinessMessage businessMessage){
-        if(ticketMaxDiscountValue!=null&&memberMaxDiscountValue!=null&&merchantMaxDiscountValue!=null){
+    private static boolean validParamForMaxDiscAmountLogic(Double ticketMaxDiscountValue, Double memberMaxDiscountValue, Double companyMaxDiscountValue, BusinessMessage businessMessage){
+        if(ticketMaxDiscountValue!=null&&memberMaxDiscountValue!=null&&companyMaxDiscountValue!=null){
             if(ticketMaxDiscountValue<=0){
                 log.info("折扣计算条件参数最大值属性(最大折扣值逻辑)验证 交易最大折扣值不得小于或等于0");
                 businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1109);
@@ -236,8 +236,8 @@ public class CalcConditionAmountUtils {
                 businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1110);
                 return false;
             }
-            if(merchantMaxDiscountValue<=0){
-                log.info("折扣计算条件参数最大值属性(最大折扣值逻辑)验证 商户最大折扣值不得小于或等于0");
+            if(companyMaxDiscountValue<=0){
+                log.info("折扣计算条件参数最大值属性(最大折扣值逻辑)验证 公司最大折扣值不得小于或等于0");
                 businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1111);
                 return false;
             }
@@ -246,8 +246,8 @@ public class CalcConditionAmountUtils {
                 businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1112);
                 return false;
             }
-            if(memberMaxDiscountValue>merchantMaxDiscountValue){
-                log.info("折扣计算条件参数最大值属性(最大折扣值逻辑)验证 会员最大折扣值不得大于商户最大折扣最大值");
+            if(memberMaxDiscountValue>companyMaxDiscountValue){
+                log.info("折扣计算条件参数最大值属性(最大折扣值逻辑)验证 会员最大折扣值不得大于公司最大折扣最大值");
                 businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1113);
                 return false;
             }

@@ -13,7 +13,7 @@ import java.io.Serializable;
 public final class Member implements Serializable {
     /**
      * 条码<br>
-     * 在商户下是顾客的唯一标识<br>
+     * 在公司下是顾客的唯一标识<br>
      * 长度区间为【1-50】
      */
     private String barcode;
@@ -23,6 +23,12 @@ public final class Member implements Serializable {
      * 当顾客并未进行分类时,该栏位可以不进行数据设定,未进行分类设定的顾客都将被划分为同一分类
      */
     private String type;
+    /**
+     * 自定义类型<br>
+     * 手动设定时不可以设定为空字符串(""," "),否则引擎将默认为未设置顾客分类<br>
+     * 当顾客并未进行分类时,该栏位可以不进行数据设定,未进行分类设定的顾客都将被划分为同一分类
+     */
+    private String customType;
     /**
      * 姓名
      */
@@ -82,6 +88,17 @@ public final class Member implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getCustomType() {
+        if(StringUtils.isBlank(customType)){
+            customType = "";
+        }
+        return customType;
+    }
+
+    public void setCustomType(String customType) {
+        this.customType = customType;
     }
 
     /**

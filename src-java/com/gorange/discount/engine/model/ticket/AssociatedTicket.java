@@ -13,12 +13,12 @@ import java.util.Date;
  */
 public final class AssociatedTicket implements Serializable {
     /**
-     * 交易商户<br>
-     * 商户的唯一标识<br>
+     * 交易公司<br>
+     * 公司的唯一标识<br>
      * 不得为null 或 "" 或 " "<br>
      * 长度区间为【1-50】
      */
-    private String merchantNo;
+    private String companyNo;
     /**
      * 交易时间<br>
      * 不得为null
@@ -32,22 +32,22 @@ public final class AssociatedTicket implements Serializable {
     private Double ticketTotalAmount;
 
     /**
-     * 获取merchantNo属性值
+     * 获取companyNo属性值
      *
-     * @return merchantNo属性值
+     * @return companyNo属性值
      */
-    public String getMerchantNo() {
-        return merchantNo;
+    public String getCompanyNo() {
+        return companyNo;
     }
 
     /**
-     * 设置merchantNo属性值
-     * 可以使用getMerchantNo()获取merchantNo的属性值
+     * 设置companyNo属性值<br>
+     * 可以使用getCompanyNo()获取companyNo的属性值
      *
-     * @param merchantNo merchantNo
+     * @param companyNo companyNo
      */
-    public void setMerchantNo(String merchantNo) {
-        this.merchantNo = merchantNo;
+    public void setCompanyNo(String companyNo) {
+        this.companyNo = companyNo;
     }
 
     /**

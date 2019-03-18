@@ -82,14 +82,14 @@ public final class DiscountBusiness {
     /**
      * 查询顾客可参与折扣
      * @param languageCode  国际化语言代码
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param timeZone      时区
      * @param businessTime  交易时间
      * @param member        顾客对象
      * @param discountList  折扣数据集
      * @return 返回顾客可参与的折扣
      */
-    public QueryMemberDiscountResult queryMemberJoinDiscount(String languageCode, String merchantNo, String timeZone, Date businessTime, Member member, List<Discount> discountList){
+    public QueryMemberDiscountResult queryMemberJoinDiscount(String languageCode, String companyNo, String timeZone, Date businessTime, Member member, List<Discount> discountList){
         synchronized (this){
             String active = UUID.randomUUID().toString();
             log.info("============================================Start Query Member Discount【"+active+"】==========================================================");
@@ -105,7 +105,7 @@ public final class DiscountBusiness {
                     return discountQueryResult.setResultInfo(businessMessage.getBusinessMessageEnum());
                 }
 
-                List<DiscountMemo> joinDiscList = BusinessUtils.filterTargetMemberDiscount(merchantNo,timeZone,businessTime,member,discountList);
+                List<DiscountMemo> joinDiscList = BusinessUtils.filterTargetMemberDiscount(companyNo,timeZone,businessTime,member,discountList);
 
                 discountQueryResult.setDiscountList(joinDiscList);
             }catch (Exception e){
@@ -120,14 +120,14 @@ public final class DiscountBusiness {
     /**
      * 查询商品可参与折扣
      * @param languageCode  国际化语言代码
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param timeZone      时区
      * @param businessTime  交易时间
      * @param goodsList     商品对象集
      * @param discountList  折扣数据集
      * @return 返回商品可参与的折扣
      */
-    public QueryGoodsDiscountResult queryGoodsJoinDiscount(String languageCode, String merchantNo, String timeZone, Date businessTime, List<Goods> goodsList, List<Discount> discountList){
+    public QueryGoodsDiscountResult queryGoodsJoinDiscount(String languageCode, String companyNo, String timeZone, Date businessTime, List<Goods> goodsList, List<Discount> discountList){
         synchronized (this){
             String active = UUID.randomUUID().toString();
             log.info("============================================Start Query Goods Discount【"+active+"】==========================================================");
@@ -143,7 +143,7 @@ public final class DiscountBusiness {
                     return discountQueryResult.setResultInfo(businessMessage.getBusinessMessageEnum());
                 }
 
-                Map<String,List<DiscountMemo>> joinDiscInfo = BusinessUtils.filterTargetGoodsDiscount(merchantNo,timeZone,businessTime,goodsList,discountList);
+                Map<String,List<DiscountMemo>> joinDiscInfo = BusinessUtils.filterTargetGoodsDiscount(companyNo,timeZone,businessTime,goodsList,discountList);
 
                 discountQueryResult.setDiscountInfo(joinDiscInfo);
             }catch (Exception e){
@@ -158,7 +158,7 @@ public final class DiscountBusiness {
     /**
      * 查询顾客购买的商品可参与折扣
      * @param languageCode  国际化语言代码
-     * @param merchantNo    商户号
+     * @param companyNo     公司编号
      * @param timeZone      时区
      * @param businessTime  交易时间
      * @param member        顾客对象
@@ -166,7 +166,7 @@ public final class DiscountBusiness {
      * @param discountList  折扣数据集
      * @return 返回顾客可参与的折扣
      */
-    public QueryGoodsDiscountResult queryMemberAndGoodsJoinDiscount(String languageCode, String merchantNo, String timeZone, Date businessTime, Member member, List<Goods> goodsList, List<Discount> discountList){
+    public QueryGoodsDiscountResult queryMemberAndGoodsJoinDiscount(String languageCode, String companyNo, String timeZone, Date businessTime, Member member, List<Goods> goodsList, List<Discount> discountList){
         synchronized (this){
             String active = UUID.randomUUID().toString();
             log.info("============================================Start Query Member's Goods Discount【"+active+"】==========================================================");
@@ -185,7 +185,7 @@ public final class DiscountBusiness {
                     return discountQueryResult.setResultInfo(businessMessage.getBusinessMessageEnum());
                 }
 
-                Map<String,List<DiscountMemo>> joinDiscInfo = BusinessUtils.filterTargetMemberAndGoodsDiscount(merchantNo,businessTime,timeZone,member,goodsList,discountList);
+                Map<String,List<DiscountMemo>> joinDiscInfo = BusinessUtils.filterTargetMemberAndGoodsDiscount(companyNo,businessTime,timeZone,member,goodsList,discountList);
 
                 discountQueryResult.setDiscountInfo(joinDiscInfo);
             }catch (Exception e){

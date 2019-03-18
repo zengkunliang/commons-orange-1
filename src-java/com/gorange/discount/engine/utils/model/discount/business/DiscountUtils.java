@@ -24,9 +24,9 @@ import java.util.List;
 public class DiscountUtils {
     private static Logger log = LoggerFactory.getLogger(DiscountUtils.class);
     /**
-     * 商户编号最大长度
+     * 公司编号最大长度
      */
-    public static final Integer MERCHANT_NO_MAX_LENGTH      = 50;
+    public static final Integer COMPANY_NO_MAX_LENGTH       = 50;
     /**
      * 折扣唯一编号最大长度
      */
@@ -92,8 +92,8 @@ public class DiscountUtils {
             log.debug("折扣属性(分组)验证未通过");
             return false;
         }
-        if(!DiscountUtils.validParamForMerchantNo(discount, businessMessage)){
-            log.debug("折扣属性(商户编码)验证未通过");
+        if(!DiscountUtils.validParamForCompanyNo(discount, businessMessage)){
+            log.debug("折扣属性(公司编码)验证未通过");
             return false;
         }
         if(!DiscountUtils.validParamForName(discount, businessMessage)){
@@ -162,7 +162,7 @@ public class DiscountUtils {
     }
 
     /**
-     * 折扣属性(商户编码)验证
+     * 折扣属性(公司编码)验证
      * <pre>
      * 验证条件:
      *      不得为null 或 "" 或 " "
@@ -172,15 +172,15 @@ public class DiscountUtils {
      * @param businessMessage   消息对象
      * @return 验证通过返回true 否则false
      */
-    public static boolean validParamForMerchantNo(Discount discount, BusinessMessage businessMessage){
-        if(StringUtils.isBlank(discount.getMerchantNo())){
-            log.info("折扣属性(商户编码)验证 商户编码数据不可为Bank");
+    public static boolean validParamForCompanyNo(Discount discount, BusinessMessage businessMessage){
+        if(StringUtils.isBlank(discount.getCompanyNo())){
+            log.info("折扣属性(公司编码)验证 公司编码数据不可为Bank");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0204);
             return false;
         }
-        int merchantNoLength = discount.getMerchantNo().length();
-        if(merchantNoLength>DiscountUtils.MERCHANT_NO_MAX_LENGTH){
-            log.info("折扣属性(商户编码)验证 商户编码数据不合规范");
+        int companyNoLength = discount.getCompanyNo().length();
+        if(companyNoLength>DiscountUtils.COMPANY_NO_MAX_LENGTH){
+            log.info("折扣属性(公司编码)验证 公司编码数据不合规范");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0205);
             return false;
         }
@@ -350,7 +350,7 @@ public class DiscountUtils {
         if(discount!=null){
             DiscountMemo discountMemo = new DiscountMemo();
             discountMemo.setUniqueNo(discount.getUniqueNo());
-            discountMemo.setMerchantNo(discount.getMerchantNo());
+            discountMemo.setCompanyNo(discount.getCompanyNo());
             discountMemo.setGroupNo(discount.getDiscountGroup().getGroupNo());
             discountMemo.setGroupName(discount.getDiscountGroup().getGroupName());
             discountMemo.setName(discount.getName());

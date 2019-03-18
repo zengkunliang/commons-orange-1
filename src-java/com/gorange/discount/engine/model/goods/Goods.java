@@ -29,9 +29,16 @@ public final class Goods implements Serializable {
      */
     private String groupNo;
     /**
+     * 自定义分类编号<br>
+     * 长度区间为【0-150】
+     * 手动设定时不可以设定为空字符串(""," "),否则引擎将默认为未设置商品分类<br>
+     * 当商品并未进行分类时,该栏位可以不进行数据设定,未进行分类设定的商品都将被划分为同一分类
+     */
+    private String customGroupNo;
+    /**
      * 条码<br>
      * 不得为null 且 长度区间为【6-50】
-     * 在商户下是商品的唯一标识
+     * 在公司下是商品的唯一标识
      */
     private String barcode;
     /**
@@ -217,6 +224,17 @@ public final class Goods implements Serializable {
      */
     public void setGroupNo(String groupNo) {
         this.groupNo = groupNo;
+    }
+
+    public String getCustomGroupNo() {
+        if(StringUtils.isBlank(customGroupNo)){
+            customGroupNo = "";
+        }
+        return customGroupNo;
+    }
+
+    public void setCustomGroupNo(String customGroupNo) {
+        this.customGroupNo = customGroupNo;
     }
 
     /**

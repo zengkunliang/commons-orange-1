@@ -8,17 +8,17 @@ package com.gorange.discount.engine.enums;
  */
 public enum DiscountTicketTypeEnum {
     /**
-     * 商户交易
+     * 公司交易
      */
-    MERCHANT_TICKET,
+    COMPANY_TICKET,
     /**
-     * 商户下的机台交易
+     * 公司下的机台交易
      */
-    MERCHANT_POS_TICKET,
+    COMPANY_POS_TICKET,
     /**
-     * 商户下的会员交易
+     * 公司下的会员交易
      */
-    MERCHANT_MEMBER_TICKET;
+    COMPANY_MEMBER_TICKET;
 
     /**
      * 通过名称获取枚举类对象

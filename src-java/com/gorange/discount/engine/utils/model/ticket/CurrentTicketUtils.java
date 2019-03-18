@@ -37,14 +37,14 @@ public class CurrentTicketUtils {
      */
     public static boolean validAllParam(CurrentTicket currentTicket, BusinessMessage businessMessage){
         currentTicket.resetTicketAmountInfo();
-        log.info("当前交易商户号: {}",currentTicket.getMerchantNo());
+        log.info("当前交易公司: {}",currentTicket.getCompanyNo());
         log.info("当前交易时间: {}", DateUtils.format(currentTicket.getBusinessTime(), DateFormatTypeEnum.DATE_TIME));
         log.info("当前交易时区: {}",currentTicket.getTimeZone());
         log.info("当前交易顾客: {}", currentTicket.getMember().getBarcode());
         log.info("当前交易金额保留精度: {}",currentTicket.getRounding());
         log.info("当前交易商品集数据条数: {}",currentTicket.getGoodsList().size());
-        if(!CurrentTicketUtils.validParamForMerchantNo(currentTicket, businessMessage)){
-            log.debug("当前交易属性(商户编码)验证未通过");
+        if(!CurrentTicketUtils.validParamForCompanyNo(currentTicket, businessMessage)){
+            log.debug("当前交易属性(公司编码)验证未通过");
             return false;
         }
         if(!CurrentTicketUtils.validParamForOrderNo(currentTicket, businessMessage)){
@@ -59,7 +59,7 @@ public class CurrentTicketUtils {
     }
 
     /**
-     * 当前交易属性(商户编码)验证
+     * 当前交易属性(公司编码)验证
      * <pre>
      * 验证条件:
      *      不得为null 或 "" 或 " "
@@ -69,15 +69,15 @@ public class CurrentTicketUtils {
      * @param businessMessage   消息对象
      * @return 验证通过返回true 否则false
      */
-    public static boolean validParamForMerchantNo(CurrentTicket currentTicket, BusinessMessage businessMessage){
-        if(StringUtils.isBlank(currentTicket.getMerchantNo())){
-            log.info("当前交易属性(商户编码)验证 商户编码数据不可为Bank");
+    public static boolean validParamForCompanyNo(CurrentTicket currentTicket, BusinessMessage businessMessage){
+        if(StringUtils.isBlank(currentTicket.getCompanyNo())){
+            log.info("当前交易属性(公司编码)验证 公司编码数据不可为Bank");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1400);
             return false;
         }
-        int merchantNoLength = currentTicket.getMerchantNo().length();
-        if(merchantNoLength>DiscountUtils.MERCHANT_NO_MAX_LENGTH){
-            log.info("当前交易属性(商户编码)验证 商户编码数据不合规范");
+        int companyNoLength = currentTicket.getCompanyNo().length();
+        if(companyNoLength>DiscountUtils.COMPANY_NO_MAX_LENGTH){
+            log.info("当前交易属性(公司编码)验证 公司编码数据不合规范");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1401);
             return false;
         }
@@ -101,8 +101,8 @@ public class CurrentTicketUtils {
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1402);
             return false;
         }
-        int merchantNoLength = currentTicket.getMerchantNo().length();
-        if(merchantNoLength>CurrentTicketUtils.ORDER_NO_MAX_LENGTH){
+        int orderNoLength = currentTicket.getOrderNo().length();
+        if(orderNoLength>CurrentTicketUtils.ORDER_NO_MAX_LENGTH){
             log.info("当前交易属性(交易单号)验证 交易单号数据不合规范");
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1403);
             return false;

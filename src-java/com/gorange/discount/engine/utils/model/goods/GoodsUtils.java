@@ -149,6 +149,13 @@ public class GoodsUtils {
             businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0106);
             return false;
         }
+        String customGoodsGroupNo = goods.getCustomGroupNo();
+        int customGroupNoLength = customGoodsGroupNo.length();
+        if(customGroupNoLength>GoodsUtils.GROUP_NO_MAX_LENGTH){
+            log.info("商品属性(自定义分类编号)验证 自定义分类编号长度不合规范");
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0106);
+            return false;
+        }
         return true;
     }
 
@@ -304,7 +311,8 @@ public class GoodsUtils {
      * @return 验证是否是折扣目标商品
      */
     public static boolean validTargetGoods(Goods goods, DiscountGroup discountGroup, CalcConditionGoodsTargetGoods calcConditionGoodsTargetGoods){
-        if(!CommonUtils.judgementExpression(goods.getGroupNo(),calcConditionGoodsTargetGoods.getGroupNo())){
+        if(!CommonUtils.judgementExpression(goods.getGroupNo(),calcConditionGoodsTargetGoods.getGroupNo())
+                &&!CommonUtils.judgementExpression(goods.getCustomGroupNo(),calcConditionGoodsTargetGoods.getGroupNo())){
             return false;
         }
         if(!CommonUtils.judgementExpression(goods.getBarcode(),calcConditionGoodsTargetGoods.getBarcode())){
