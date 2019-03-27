@@ -3,9 +3,10 @@ package com.gorange.discount.engine.business;
 import com.gorange.discount.engine.enums.BusinessMessageEnum;
 import com.gorange.discount.engine.model.common.BusinessMessage;
 import com.gorange.discount.engine.model.discount.business.Discount;
-import com.gorange.discount.engine.model.discount.query.DiscountMemo;
-import com.gorange.discount.engine.model.discount.query.QueryGoodsDiscountResult;
-import com.gorange.discount.engine.model.discount.query.QueryMemberDiscountResult;
+import com.gorange.discount.engine.model.discount.business.checking.CheckingDiscountResult;
+import com.gorange.discount.engine.model.discount.business.query.DiscountMemo;
+import com.gorange.discount.engine.model.discount.business.query.QueryGoodsDiscountResult;
+import com.gorange.discount.engine.model.discount.business.query.QueryMemberDiscountResult;
 import com.gorange.discount.engine.model.discount.business.DiscountResult;
 import com.gorange.discount.engine.model.goods.Goods;
 import com.gorange.discount.engine.model.member.Member;
@@ -32,6 +33,37 @@ import java.util.*;
  */
 public final class DiscountBusiness {
     private static Logger log = LoggerFactory.getLogger(DiscountBusiness.class);
+
+    /**
+     * 商品折扣检查
+     * @since 1.0.0
+     * @param languageCode      国际化语言代码
+     * @param discount          折扣数据
+     * @return 返回折扣检查结果
+     */
+    public CheckingDiscountResult checkingDiscount(String languageCode, Discount discount){
+        synchronized (this){
+            String active = UUID.randomUUID().toString();
+            log.info("============================================Start Checking【"+active+"】==========================================================");
+            CheckingDiscountResult checkingDiscountResult = new CheckingDiscountResult(StringUtils.defaultString(languageCode, I18nUtils.DEFAULT_LANGUAGE_CODE));
+            try {
+                BusinessMessage businessMessage = new BusinessMessage();
+
+                List<Discount> discountList = new ArrayList<>();
+                discountList.add(discount);
+
+                if(!DiscountUtils.validDiscountData(discountList,businessMessage)){
+                    return checkingDiscountResult.setResultInfo(businessMessage.getBusinessMessageEnum());
+                }
+
+            }catch (Exception e){
+                log.error(e.getMessage(),e);
+                checkingDiscountResult.setResultInfo(BusinessMessageEnum.MESSAGE_9999);
+            }
+            log.info("============================================End Checking【"+active+"】==========================================================");
+            return checkingDiscountResult;
+        }
+    }
 
     /**
      * 商品折扣计算

@@ -7,7 +7,7 @@ import com.gorange.discount.engine.model.discount.business.joincondition.*;
 import com.gorange.discount.engine.model.discount.business.result.DiscountResultDetail;
 import com.gorange.discount.engine.model.discount.business.result.GoodsDiscountResult;
 import com.gorange.discount.engine.model.discount.business.result.GoodsResult;
-import com.gorange.discount.engine.model.discount.query.DiscountMemo;
+import com.gorange.discount.engine.model.discount.business.query.DiscountMemo;
 import com.gorange.discount.engine.model.goods.Goods;
 import com.gorange.discount.engine.model.member.Member;
 import com.gorange.discount.engine.model.ticket.AssociatedTicket;

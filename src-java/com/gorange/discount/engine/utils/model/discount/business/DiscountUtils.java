@@ -6,7 +6,7 @@ import com.gorange.discount.engine.enums.WeekTypeEnum;
 import com.gorange.discount.engine.model.common.BusinessMessage;
 import com.gorange.discount.engine.model.discount.business.Discount;
 import com.gorange.discount.engine.model.discount.business.DiscountTime;
-import com.gorange.discount.engine.model.discount.query.DiscountMemo;
+import com.gorange.discount.engine.model.discount.business.query.DiscountMemo;
 import com.gorange.discount.engine.utils.DateUtils;
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;

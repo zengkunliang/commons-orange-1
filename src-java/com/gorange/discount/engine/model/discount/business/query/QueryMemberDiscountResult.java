@@ -1,4 +1,4 @@
-package com.gorange.discount.engine.model.discount.query;
+package com.gorange.discount.engine.model.discount.business.query;
 
 import com.gorange.discount.engine.enums.BusinessMessageEnum;
 import com.gorange.discount.engine.utils.I18nUtils;
