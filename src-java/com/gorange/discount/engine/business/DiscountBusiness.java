@@ -22,10 +22,7 @@ import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * 折扣业务处理类
@@ -38,6 +35,7 @@ public final class DiscountBusiness {
 
     /**
      * 商品折扣计算
+     * @since 1.0.0
      * @param languageCode      国际化语言代码
      * @param currentTicket     当前交易
      * @param associatedTicket  关联交易
@@ -81,6 +79,7 @@ public final class DiscountBusiness {
 
     /**
      * 查询顾客可参与折扣
+     * @since 1.0.0
      * @param languageCode  国际化语言代码
      * @param companyNo     公司编号
      * @param timeZone      时区
@@ -119,6 +118,7 @@ public final class DiscountBusiness {
 
     /**
      * 查询商品可参与折扣
+     * @since 1.0.0
      * @param languageCode  国际化语言代码
      * @param companyNo     公司编号
      * @param timeZone      时区
@@ -157,6 +157,7 @@ public final class DiscountBusiness {
 
     /**
      * 查询顾客购买的商品可参与折扣
+     * @since 1.0.0
      * @param languageCode  国际化语言代码
      * @param companyNo     公司编号
      * @param timeZone      时区
