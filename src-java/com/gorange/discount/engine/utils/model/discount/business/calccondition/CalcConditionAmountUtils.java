@@ -222,7 +222,7 @@ public class CalcConditionAmountUtils {
      * @param memberMaxDiscountValue       会员最大折扣金额
      * @param companyMaxDiscountValue      公司最大折扣金额
      * @param businessMessage              消息对象
-     * @return
+     * @return 验证通过返回true 否则false
      */
     private static boolean validParamForMaxDiscAmountLogic(Double ticketMaxDiscountValue, Double memberMaxDiscountValue, Double companyMaxDiscountValue, BusinessMessage businessMessage){
         if(ticketMaxDiscountValue!=null&&memberMaxDiscountValue!=null&&companyMaxDiscountValue!=null){

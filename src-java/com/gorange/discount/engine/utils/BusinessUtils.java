@@ -83,17 +83,17 @@ public class BusinessUtils {
                 discount.setAssociatedTicket(associatedTicket);
 
                 log.info("折扣【{}】根据会员进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByMember(discount)){
+                if(!BusinessUtils.checkingDiscountByMember(discount)){
                     continue;
                 }
 
                 log.info("折扣【{}】根据商品进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByGoods(discount)){
+                if(!BusinessUtils.checkingDiscountByGoods(discount)){
                     continue;
                 }
 
                 log.info("折扣【{}】根据交易进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByTicket(discount)){
+                if(!BusinessUtils.checkingDiscountByTicket(discount)){
                     continue;
                 }
 
@@ -187,7 +187,7 @@ public class BusinessUtils {
                 discount.setCurrentTicket(currentTicket);
 
                 log.info("折扣【{}】根据会员进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByMember(discount)){
+                if(!BusinessUtils.checkingDiscountByMember(discount)){
                     continue;
                 }
                 joinDiscountList.add(DiscountUtils.conventDiscountToDiscountMemo(timeZone,discount));
@@ -221,7 +221,7 @@ public class BusinessUtils {
                 discount.setCurrentTicket(currentTicket);
 
                 log.info("折扣【{}】根据商品进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByGoods(discount)){
+                if(!BusinessUtils.checkingDiscountByGoods(discount)){
                     continue;
                 }
 
@@ -259,12 +259,12 @@ public class BusinessUtils {
                 discount.setCurrentTicket(currentTicket);
 
                 log.info("折扣【{}】根据会员进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByMember(discount)){
+                if(!BusinessUtils.checkingDiscountByMember(discount)){
                     continue;
                 }
 
                 log.info("折扣【{}】根据商品进行折扣数据验证",discount.getUniqueNo());
-                if(!BusinessUtils.filterDiscountByGoods(discount)){
+                if(!BusinessUtils.checkingDiscountByGoods(discount)){
                     continue;
                 }
 
@@ -281,7 +281,7 @@ public class BusinessUtils {
      * @param discount      折扣数据
      * @return 通过顾客条件验证返回true 否则返回false
      */
-    private static boolean filterDiscountByMember(Discount discount){
+    private static boolean checkingDiscountByMember(Discount discount){
         DiscountJoinCondition discountJoinCondition = discount.getDiscountJoinCondition();
         if(discountJoinCondition.getHaveCondition()){
             JoinCondition joinCondition = discountJoinCondition.getCondition();
@@ -369,7 +369,7 @@ public class BusinessUtils {
      * @param discount      折扣数据
      * @return 通过商品条件验证返回true 否则返回false
      */
-    private static boolean filterDiscountByGoods(Discount discount){
+    private static boolean checkingDiscountByGoods(Discount discount){
         DiscountJoinCondition discountJoinCondition = discount.getDiscountJoinCondition();
         if(discountJoinCondition.getHaveCondition()){
             JoinCondition joinCondition = discountJoinCondition.getCondition();
@@ -415,7 +415,7 @@ public class BusinessUtils {
      * @param discount      折扣数据
      * @return 通过交易条件验证返回true 否则返回false
      */
-    private static boolean filterDiscountByTicket(Discount discount){
+    private static boolean checkingDiscountByTicket(Discount discount){
         DiscountJoinCondition discountJoinCondition = discount.getDiscountJoinCondition();
         if(discountJoinCondition.getHaveCondition()){
             JoinCondition joinCondition = discountJoinCondition.getCondition();
@@ -429,7 +429,7 @@ public class BusinessUtils {
                 if(!BusinessUtils.filterDiscountByAssociatedTicket(associatedTicket,conditionTicketForAssociated)){
                     return false;
                 }
-                if(!BusinessUtils.filterDiscountByCurrentTicket(currentTicket,conditionTicketForCurrent)){
+                if(!BusinessUtils.checkingDiscountByCurrentTicket(currentTicket,conditionTicketForCurrent)){
                     return false;
                 }
             }
@@ -441,7 +441,7 @@ public class BusinessUtils {
      * 根据关联交易进行折扣数据过滤
      * @param associatedTicket              关联交易
      * @param conditionTicketForAssociated  关联交易条件
-     * @return
+     * @return 通过交易条件验证返回true 否则返回false
      */
     private static boolean filterDiscountByAssociatedTicket(AssociatedTicket associatedTicket,JoinConditionTicketForAssociated conditionTicketForAssociated){
         if(conditionTicketForAssociated!=null){
@@ -469,9 +469,9 @@ public class BusinessUtils {
      * 根据当前交易进行折扣数据过滤
      * @param currentTicket                 当前交易
      * @param conditionTicketForCurrent     当前交易条件
-     * @return
+     * @return 通过交易条件验证返回true 否则返回false
      */
-    private static boolean filterDiscountByCurrentTicket(CurrentTicket currentTicket,JoinConditionTicketForCurrent conditionTicketForCurrent){
+    private static boolean checkingDiscountByCurrentTicket(CurrentTicket currentTicket, JoinConditionTicketForCurrent conditionTicketForCurrent){
         if(conditionTicketForCurrent!=null){
             if(conditionTicketForCurrent.getIndex()!=0){
                 String ticketCountKey = conditionTicketForCurrent.getType()+"-"+conditionTicketForCurrent.getJoinType();
@@ -569,7 +569,7 @@ public class BusinessUtils {
      * 获取交易可参与折扣次数
      * @param conditionGoodsInfoMap         计算商品表达式的交易中可参与交易计算的商品信息
      * @param calcConditionGoodsCalcGoods   计算商品表达式对象
-     * @return
+     * @return 返回交易可参与折扣次数
      */
     private static int getTicketJoinDiscountCount(Map<String,Double> conditionGoodsInfoMap, CalcConditionGoodsCalcGoods calcConditionGoodsCalcGoods){
         boolean iteration = calcConditionGoodsCalcGoods.getIteration();
@@ -1015,7 +1015,7 @@ public class BusinessUtils {
      * @param rounding  保留精度
      * @param uniqueNo  折扣唯一标识
      * @param goods     商品对象
-     * @return
+     * @return 返回商品折扣金额
      */
     private static double getGoodsDiscountAmountByDiscUniqueNo(int rounding,String uniqueNo,Goods goods){
         double singleDiscSumAmount = 0;
@@ -1032,7 +1032,7 @@ public class BusinessUtils {
      * @param rounding          保留精度
      * @param uniqueNo          折扣唯一标识
      * @param currentTicket     当前交易对象
-     * @return
+     * @return 返回商品折扣值
      */
     private static double getTicketDiscountValueByDiscUniqueNo(int rounding, String uniqueNo, CurrentTicket currentTicket){
         double singDiscSumValue = 0;
@@ -1049,33 +1049,30 @@ public class BusinessUtils {
     /**
      * 获取该折扣最大可折扣值
      * @param discount      折扣对象
-     * @return
+     * @return 获取当前交易中该折扣最大可折扣值
      */
     private static double getSingleDiscountMaxValue(Discount discount){
-        double singleDiscountMaxValue = Double.MAX_VALUE;
-        CalcConditionValue conditionAmount = discount.getDiscountCalcCondition().getCondition().getConditionValue();
-        if(conditionAmount!=null){
+        double ticketMaxDiscValue = Double.MAX_VALUE;
+        double memberMaxDiscValue = Double.MAX_VALUE;
+        double companyMaxDiscValue = Double.MAX_VALUE;
+        CalcConditionValue calcConditionValue = discount.getDiscountCalcCondition().getCondition().getConditionValue();
+        if(calcConditionValue!=null){
             //获取交易最大折扣金额
-            double ticketMaxDiscValue = Double.MAX_VALUE;
-            if(conditionAmount.getTicketMaxDiscValue()!=null&&!conditionAmount.getTicketMaxDiscValue().isEmpty()){
-                ticketMaxDiscValue = conditionAmount.getTicketMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+            if(calcConditionValue.getTicketMaxDiscValue()!=null&&!calcConditionValue.getTicketMaxDiscValue().isEmpty()){
+                ticketMaxDiscValue = calcConditionValue.getTicketMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
             }
             //获取会员最大折扣金额
-            double memberMaxDiscValue = Double.MAX_VALUE;
-            if(conditionAmount.getMemberMaxDiscValue()!=null&&!conditionAmount.getMemberMaxDiscValue().isEmpty()){
-                memberMaxDiscValue = conditionAmount.getMemberMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+            if(calcConditionValue.getMemberMaxDiscValue()!=null&&!calcConditionValue.getMemberMaxDiscValue().isEmpty()){
+                memberMaxDiscValue = calcConditionValue.getMemberMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
             }
             memberMaxDiscValue -= discount.getMemberHistoryDiscValue();
             //获取门店最大折扣金额
-            double companyMaxDiscValue = Double.MAX_VALUE;
-            if(conditionAmount.getCompanyMaxDiscValue()!=null&&!conditionAmount.getCompanyMaxDiscValue().isEmpty()){
-                companyMaxDiscValue = conditionAmount.getCompanyMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+            if(calcConditionValue.getCompanyMaxDiscValue()!=null&&!calcConditionValue.getCompanyMaxDiscValue().isEmpty()){
+                companyMaxDiscValue = calcConditionValue.getCompanyMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
             }
             companyMaxDiscValue -= discount.getCompanyHistoryDiscValue();
-
-            singleDiscountMaxValue = Math.min(ticketMaxDiscValue,Math.min(memberMaxDiscValue,companyMaxDiscValue));
         }
-        return singleDiscountMaxValue;
+        return Math.min(ticketMaxDiscValue,Math.min(memberMaxDiscValue,companyMaxDiscValue));
     }
 
     /**
