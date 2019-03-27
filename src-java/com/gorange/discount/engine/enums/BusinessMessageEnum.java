@@ -121,10 +121,10 @@ public enum BusinessMessageEnum {
 
 
     /** 折扣参与条件验证 明确表示有参与条件时,参与条件参数不可为null **/
-    MESSAGE_0500("business_message_0600", "0600", "折扣参与条件中明确表示有参与条件时,参与条件参数不可为null"),
+    MESSAGE_0500("business_message_0500", "0500", "折扣参与条件中明确表示有参与条件时,参与条件参数不可为null"),
 
     /** 折扣结果验证  **/
-    MESSAGE_0600("business_message_0400", "0400", "折扣计算条件中计算条件参数不可为null"),
+    MESSAGE_0600("business_message_0600", "0600", "折扣计算条件中计算条件参数不可为null"),
 
     /** 折扣参与条件参数顾客验证 条码表达式key数据不合规范 **/
     MESSAGE_0700("business_message_0700", "0700", "折扣参与条件参数顾客属性中条码表达式key数据不合规范"),
@@ -196,7 +196,7 @@ public enum BusinessMessageEnum {
     /** 折扣参与条件交易参数当前交易验证 交易总金额表达式key数据不合规范 **/
     MESSAGE_0920("business_message_0920", "0920", "折扣参与条件交易参数当前交易属性中交易总金额表达式key数据不合规范"),
     /** 折扣参与条件交易参数当前交易验证 交易总金额key对应的金额数据不可为null **/
-    MESSAGE_0921("business_message_0920", "0921", "折扣参与条件交易参数当前交易属性中交易总金额key对应的金额数据不可为null"),
+    MESSAGE_0921("business_message_0921", "0921", "折扣参与条件交易参数当前交易属性中交易总金额key对应的金额数据不可为null"),
     /** 折扣参与条件交易参数当前交易验证 交易总金额表达式key对应的金额数据不合规范 **/
     MESSAGE_0922("business_message_0922", "0922", "折扣参与条件交易参数当前交易属性中交易总金额表达式key对应的金额数据不合规范"),
 
