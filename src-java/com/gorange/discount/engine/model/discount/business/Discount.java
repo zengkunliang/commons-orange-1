@@ -84,6 +84,14 @@ public final class Discount implements Serializable {
 
 
     /**
+     * 会员历史折扣值(处理中自定义属性)
+     */
+    private Double memberHistoryDiscValue;
+    /**
+     * 门店历史折扣值(处理中自定义属性)
+     */
+    private Double companyHistoryDiscValue;
+    /**
      * 当前交易(处理中自定义属性)
      */
     private CurrentTicket currentTicket;
@@ -336,6 +344,50 @@ public final class Discount implements Serializable {
         this.discountCalcCondition = discountCalcCondition;
     }
 
+
+    /**
+     * 获取memberHistoryDiscValue属性值
+     *
+     * @return memberHistoryDiscValue属性值
+     */
+    public Double getMemberHistoryDiscValue() {
+        if(memberHistoryDiscValue==null){
+            memberHistoryDiscValue = 0D;
+        }
+        return memberHistoryDiscValue;
+    }
+
+    /**
+     * 设置memberHistoryDiscValue属性值<br>
+     * 可以使用getMemberHistoryDiscValue()获取memberHistoryDiscValue的属性值
+     *
+     * @param memberHistoryDiscValue memberHistoryDiscValue
+     */
+    public void setMemberHistoryDiscValue(Double memberHistoryDiscValue) {
+        this.memberHistoryDiscValue = memberHistoryDiscValue;
+    }
+
+    /**
+     * 获取companyHistoryDiscValue属性值
+     *
+     * @return companyHistoryDiscValue属性值
+     */
+    public Double getCompanyHistoryDiscValue() {
+        if(companyHistoryDiscValue==null){
+            companyHistoryDiscValue = 0D;
+        }
+        return companyHistoryDiscValue;
+    }
+
+    /**
+     * 设置companyHistoryDiscValue属性值<br>
+     * 可以使用getCompanyHistoryDiscValue()获取companyHistoryDiscValue的属性值
+     *
+     * @param companyHistoryDiscValue companyHistoryDiscValue
+     */
+    public void setCompanyHistoryDiscValue(Double companyHistoryDiscValue) {
+        this.companyHistoryDiscValue = companyHistoryDiscValue;
+    }
 
     /**
      * 获取currentTicket属性值

@@ -1048,24 +1048,42 @@ public class BusinessUtils {
 
     /**
      * 获取该折扣最大可折扣值
-     * @param discount
+     * @param discount      折扣对象
      * @return
      */
     private static double getSingleDiscountMaxValue(Discount discount){
         double singleDiscountMaxValue = Double.MAX_VALUE;
         CalcConditionValue conditionAmount = discount.getDiscountCalcCondition().getCondition().getConditionValue();
-        if(conditionAmount!=null&&conditionAmount.getTicketMaxDiscValue()!=null&&!conditionAmount.getTicketMaxDiscValue().isEmpty()){
-            singleDiscountMaxValue = conditionAmount.getTicketMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+        if(conditionAmount!=null){
+            //获取交易最大折扣金额
+            double ticketMaxDiscValue = Double.MAX_VALUE;
+            if(conditionAmount.getTicketMaxDiscValue()!=null&&!conditionAmount.getTicketMaxDiscValue().isEmpty()){
+                ticketMaxDiscValue = conditionAmount.getTicketMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+            }
+            //获取会员最大折扣金额
+            double memberMaxDiscValue = Double.MAX_VALUE;
+            if(conditionAmount.getMemberMaxDiscValue()!=null&&!conditionAmount.getMemberMaxDiscValue().isEmpty()){
+                memberMaxDiscValue = conditionAmount.getMemberMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+            }
+            memberMaxDiscValue -= discount.getMemberHistoryDiscValue();
+            //获取门店最大折扣金额
+            double companyMaxDiscValue = Double.MAX_VALUE;
+            if(conditionAmount.getCompanyMaxDiscValue()!=null&&!conditionAmount.getCompanyMaxDiscValue().isEmpty()){
+                companyMaxDiscValue = conditionAmount.getCompanyMaxDiscValue().get(ExpressionKeyEnum.EQ.name());
+            }
+            companyMaxDiscValue -= discount.getCompanyHistoryDiscValue();
+
+            singleDiscountMaxValue = Math.min(ticketMaxDiscValue,Math.min(memberMaxDiscValue,companyMaxDiscValue));
         }
         return singleDiscountMaxValue;
     }
 
     /**
      * 包装商品参与折扣信息结果
-     * @param timeZone
-     * @param discount
-     * @param joinDiscInfo
-     * @param joinGoodsBarcodeList
+     * @param timeZone              时区
+     * @param discount              折扣对象
+     * @param joinDiscInfo          参与折扣信息
+     * @param joinGoodsBarcodeList  参与商品条码集
      */
     private static void packageGoodsJoinDiscInfo(String timeZone,Discount discount,Map<String,List<DiscountMemo>> joinDiscInfo,List<String> joinGoodsBarcodeList){
         if(joinGoodsBarcodeList!=null&&!joinGoodsBarcodeList.isEmpty()){
