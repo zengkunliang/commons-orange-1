@@ -67,12 +67,17 @@ public class I18nUtils {
                 ResourceBundle bundle = ResourceBundle.getBundle("message" , new Locale(locale.getLanguage(),locale.getCountry(),""));
                 if(bundle!=null&&bundle.keySet()!=null&&!bundle.keySet().isEmpty()){
                     bundle.keySet().forEach(key -> {
-                        if (!I18nUtils.LANGUAGE_CACHE.containsKey(languageKey)) {
-                            Map<String,String> infoMap = new LinkedHashMap<>();
-                            infoMap.put(key, bundle.getString(key));
-                            I18nUtils.LANGUAGE_CACHE.put(languageKey, infoMap);
-                        }else{
-                            I18nUtils.LANGUAGE_CACHE.get(languageKey).put(key, bundle.getString(key));
+                        try{
+                            String message = new String(bundle.getString(key).getBytes("ISO-8859-1"), "UTF8");
+                            if (!I18nUtils.LANGUAGE_CACHE.containsKey(languageKey)) {
+                                Map<String,String> infoMap = new LinkedHashMap<>();
+                                infoMap.put(key, message);
+                                I18nUtils.LANGUAGE_CACHE.put(languageKey, infoMap);
+                            }else{
+                                I18nUtils.LANGUAGE_CACHE.get(languageKey).put(key, message);
+                            }
+                        }catch (Exception e){
+                            log.error(e.getMessage(),e);
                         }
                     });
                 }
