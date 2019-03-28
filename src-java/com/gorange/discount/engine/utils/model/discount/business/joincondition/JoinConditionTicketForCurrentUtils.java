@@ -88,12 +88,12 @@ public class JoinConditionTicketForCurrentUtils {
         String joinType = joinConditionTicketForCurrent.getJoinType();
         if(joinType==null){
             log.info("折扣参与条件交易参数当前交易属性(交易参与类型)验证 交易参与类型不可为null");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0910);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0902);
             return false;
         }
         if(DiscountTicketJoinTypeEnum.getExpressionKeyEnum(joinType)==null){
             log.info("折扣参与条件交易参数当前交易属性(交易参与类型)验证 交易参与类型数据不合规范");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0911);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0903);
             return false;
         }
         return true;
@@ -123,22 +123,22 @@ public class JoinConditionTicketForCurrentUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件交易参数当前交易属性(交易总金额)验证 交易总金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0920);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0904);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.GR&&expressionKeyEnum!=ExpressionKeyEnum.GR_AND_EQ){
                     log.info("折扣参与条件交易参数当前交易属性(交易总金额)验证 交易总金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0920);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0904);
                     return false;
                 }
                 if(ticketTotalAmount==null){
                     log.info("折扣参与条件交易参数当前交易属性(交易总金额)验证 交易总金额key对应的金额数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0921);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0905);
                     return false;
                 }
                 if(ticketTotalAmount<=0){
                     log.info("折扣参与条件交易参数当前交易属性(交易总金额)验证 交易总金额表达式key对应的金额数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0922);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0906);
                     return false;
                 }
             }

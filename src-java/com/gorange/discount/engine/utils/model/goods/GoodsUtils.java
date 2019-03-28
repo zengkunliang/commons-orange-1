@@ -4,7 +4,6 @@ import com.gorange.discount.engine.enums.BusinessMessageEnum;
 import com.gorange.discount.engine.model.common.BusinessMessage;
 import com.gorange.discount.engine.model.discount.business.Discount;
 import com.gorange.discount.engine.model.discount.business.DiscountGroup;
-import com.gorange.discount.engine.model.discount.business.calccondition.CalcConditionGoods;
 import com.gorange.discount.engine.model.discount.business.calccondition.CalcConditionGoodsTargetGoods;
 import com.gorange.discount.engine.model.discount.business.result.GoodsDiscountResult;
 import com.gorange.discount.engine.model.goods.Goods;

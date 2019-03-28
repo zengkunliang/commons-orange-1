@@ -18,7 +18,7 @@ public class DiscountGroupUtils {
     /**
      * 折扣分组编号最大长度
      */
-    public static final Integer GROUP_NO_MAX_LENGTH         = 10;
+    public static final Integer GROUP_NO_MAX_LENGTH         = 50;
     /**
      * 折扣分组名称最大长度
      */
@@ -97,7 +97,7 @@ public class DiscountGroupUtils {
     public static boolean validParamForName(DiscountGroup discountGroup, BusinessMessage businessMessage){
         if(!StringUtils.isBlank(discountGroup.getGroupName())&&discountGroup.getGroupName().length()>DiscountGroupUtils.NAME_NO_MAX_LENGTH){
             log.info("折扣分组属性(名称)验证 名称数据不合规范");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0209);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1702);
             return false;
         }
         return true;

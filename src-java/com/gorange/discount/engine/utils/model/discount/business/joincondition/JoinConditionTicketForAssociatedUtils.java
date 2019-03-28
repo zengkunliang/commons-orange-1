@@ -116,24 +116,24 @@ public class JoinConditionTicketForAssociatedUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易开始时间表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1010);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1003);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.GR_AND_EQ){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证  交易开始时间表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1010);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1003);
                     return false;
                 }
                 String startTimeStr = joinConditionTicketForAssociated.getTicketStartTime().get(expression);
                 if(StringUtils.isBlank(startTimeStr)){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易开始时间表达式key对应的开始时间数据不可为Blank");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1011);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1004);
                     return false;
                 }
                 startTime = DateUtils.convertStringTODate(DateUtils.datetimeUtcFmt(),startTimeStr);
                 if(startTime==null){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易开始时间表达式key对应的开始时间数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1012);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1005);
                     return false;
                 }
             }
@@ -147,30 +147,30 @@ public class JoinConditionTicketForAssociatedUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易结束时间表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1020);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1006);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.LE_AND_EQ){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证  交易结束时间表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1020);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1006);
                     return false;
                 }
                 if(StringUtils.isBlank(endTimeStr)){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易结束时间表达式key对应的结束时间数据不可为Blank");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1021);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1007);
                     return false;
                 }
                 endTime = DateUtils.convertStringTODate(DateUtils.datetimeUtcFmt(),endTimeStr);
                 if(endTime==null){
                     log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易结束时间表达式key对应的结束时间数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1022);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1008);
                     return false;
                 }
             }
         }
         if(startTime!=null&&endTime!=null&&startTime.getTime()>=endTime.getTime()){
             log.info("折扣参与条件交易参数关联交易属性(交易时间)验证 交易开始时间不得大于交易结束时间");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1023);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1009);
             return false;
         }
         return true;
@@ -200,24 +200,24 @@ public class JoinConditionTicketForAssociatedUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件交易参数关联交易属性(交易总金额)验证 交易总金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1024);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1010);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.EQ
                         &&expressionKeyEnum!=ExpressionKeyEnum.GR_AND_EQ
                         &&expressionKeyEnum!=ExpressionKeyEnum.LE_AND_EQ){
                     log.info("折扣参与条件交易参数关联交易属性(交易总金额)验证 交易总金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1024);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1010);
                     return false;
                 }
                 if(ticketTotalAmount==null){
                     log.info("折扣参与条件交易参数关联交易属性(交易总金额)验证 交易总金额key对应的金额数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1025);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1011);
                     return false;
                 }
                 if(ticketTotalAmount<=0){
                     log.info("折扣参与条件交易参数关联交易属性(交易总金额)验证 交易总金额表达式key对应的金额数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1026);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_1012);
                     return false;
                 }
             }

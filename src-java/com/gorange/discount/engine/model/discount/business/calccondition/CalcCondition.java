@@ -11,49 +11,49 @@ import java.util.List;
  */
 public class CalcCondition implements Serializable {
     /**
-     * 折扣计算条件商品类
+     * 计算商品
      */
-    private List<CalcConditionGoods> conditionGoods;
+    private CalcConditionGoodsCalcGoods calcGoods;
     /**
-     * 折扣计算条件值类
+     * 目标商品
      */
-    private CalcConditionValue conditionValue;
+    private CalcConditionGoodsTargetGoods targetGoods;
 
     /**
-     * 获取conditionGoods属性值
+     * 获取calcGoods属性值
      *
-     * @return conditionGoods属性值
+     * @return calcGoods属性值
      */
-    public List<CalcConditionGoods> getConditionGoods() {
-        return conditionGoods;
+    public CalcConditionGoodsCalcGoods getCalcGoods() {
+        return calcGoods;
     }
 
     /**
-     * 设置conditionGoods属性值
-     * 可以使用getConditionGoods()获取conditionGoods的属性值
+     * 设置calcGoods属性值
+     * 可以使用getCalcGoods()获取calcGoods的属性值
      *
-     * @param conditionGoods conditionGoods
+     * @param calcGoods calcGoods
      */
-    public void setConditionGoods(List<CalcConditionGoods> conditionGoods) {
-        this.conditionGoods = conditionGoods;
+    public void setCalcGoods(CalcConditionGoodsCalcGoods calcGoods) {
+        this.calcGoods = calcGoods;
     }
 
     /**
-     * 获取conditionValue属性值
+     * 获取targetGoods属性值
      *
-     * @return conditionValue属性值
+     * @return targetGoods属性值
      */
-    public CalcConditionValue getConditionValue() {
-        return conditionValue;
+    public CalcConditionGoodsTargetGoods getTargetGoods() {
+        return targetGoods;
     }
 
     /**
-     * 设置conditionValue属性值<br>
-     * 可以使用getConditionValue()获取conditionValue的属性值
+     * 设置targetGoods属性值
+     * 可以使用getTargetGoods()获取targetGoods的属性值
      *
-     * @param conditionValue conditionValue
+     * @param targetGoods targetGoods
      */
-    public void setConditionValue(CalcConditionValue conditionValue) {
-        this.conditionValue = conditionValue;
+    public void setTargetGoods(CalcConditionGoodsTargetGoods targetGoods) {
+        this.targetGoods = targetGoods;
     }
 }

@@ -136,7 +136,7 @@ public class DiscountUtils {
     public static boolean validParamForUniqueNo(Discount discount, BusinessMessage businessMessage){
         if(!StringUtils.isBlank(discount.getUniqueNo())&&discount.getUniqueNo().length()>DiscountUtils.UNIQUE_NO_MAX_LENGTH){
             log.info("折扣属性(唯一标识)验证 唯一标识数据不合规范");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0208);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0206);
             return false;
         }
         return true;
@@ -155,7 +155,7 @@ public class DiscountUtils {
     public static boolean validParamForGroupNo(Discount discount, BusinessMessage businessMessage){
         if(discount.getDiscountGroup()==null){
             log.info("折扣属性(分组)验证 分组数据不可为null");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0206);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0205);
             return false;
         }
         return DiscountGroupUtils.validAllParam(discount.getDiscountGroup(),businessMessage);
@@ -175,13 +175,13 @@ public class DiscountUtils {
     public static boolean validParamForCompanyNo(Discount discount, BusinessMessage businessMessage){
         if(StringUtils.isBlank(discount.getCompanyNo())){
             log.info("折扣属性(公司编码)验证 公司编码数据不可为Bank");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0204);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0203);
             return false;
         }
         int companyNoLength = discount.getCompanyNo().length();
         if(companyNoLength>DiscountUtils.COMPANY_NO_MAX_LENGTH){
             log.info("折扣属性(公司编码)验证 公司编码数据不合规范");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0205);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0204);
             return false;
         }
         return true;
@@ -200,7 +200,7 @@ public class DiscountUtils {
     public static boolean validParamForName(Discount discount, BusinessMessage businessMessage){
         if(!StringUtils.isBlank(discount.getName())&&discount.getName().length()>DiscountUtils.NAME_NO_MAX_LENGTH){
             log.info("折扣属性(名称)验证 名称数据不合规范");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0209);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0207);
             return false;
         }
         return true;
@@ -221,22 +221,22 @@ public class DiscountUtils {
     public static boolean validParamForDate(Discount discount, BusinessMessage businessMessage){
         if(discount.getStartDate()==null){
             log.info("折扣属性(日期)验证 开始日期不可null");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0210);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0208);
             return false;
         }
         if(discount.getEndDate()==null){
             log.info("折扣属性(日期)验证 结束日期不可null");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0211);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0209);
             return false;
         }
         if(discount.getStartDate().getTime()>discount.getEndDate().getTime()){
             log.info("折扣属性(日期)验证 开始日期不得大于结束日期");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0212);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0210);
             return false;
         }
         if(discount.getEndDate().getTime()< DateUtils.setDateTime(new Date(),0,0,0,0).getTimeInMillis()){
             log.info("折扣属性(日期)验证 折扣结束日期不得小于当前日期");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0213);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0211);
             return false;
         }
 
@@ -256,13 +256,13 @@ public class DiscountUtils {
     public static boolean validParamForWeekList(Discount discount, BusinessMessage businessMessage){
         if(discount.getWeekList()==null){
             log.info("折扣属性(星期区间)验证 星期区间不可null");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0214);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0212);
             return false;
         }
         for(String week:discount.getWeekList()){
             if(WeekTypeEnum.getWeekTypeEnum(week)==null){
                 log.info("折扣属性(日期)验证 星期区间数据不合规范");
-                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0215);
+                businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0213);
                 return false;
             }
         }
@@ -282,7 +282,7 @@ public class DiscountUtils {
     public static boolean validParamForDiscountTimeList(Discount discount, BusinessMessage businessMessage){
         if(discount.getDiscountTimeList().isEmpty()){
             log.info("折扣属性(时间区间)验证 时间区间未设置");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0216);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0214);
             return false;
         }
         for (DiscountTime discountTime : discount.getDiscountTimeList()) {

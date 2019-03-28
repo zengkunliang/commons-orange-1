@@ -125,25 +125,25 @@ public class JoinConditionMemberUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数顾客属性(分类)验证 分类表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0710);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0703);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.IN&&expressionKeyEnum!=ExpressionKeyEnum.NOT_IN){
                     log.info("折扣参与条件参数顾客属性(分类)验证 分类表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0710);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0703);
                     return false;
                 }
                 List<String> typeList = joinConditionMember.getType().get(expression);
                 if(typeList==null){
                     log.info("折扣参与条件参数顾客属性(分类)验证 分类表达式key对应的分类数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0711);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0704);
                     return false;
                 }
                 for(String type:typeList){
                     int barcodeLength = StringUtils.defaultString(type).length();
                     if(barcodeLength>MemberUtils.TYPE_MAX_LENGTH){
                         log.info("折扣参与条件参数顾客属性(分类)验证 分类表达式key对应的分类数据不合规范");
-                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0712);
+                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0705);
                         return false;
                     }
                 }
@@ -175,23 +175,23 @@ public class JoinConditionMemberUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数顾客属性(性别)验证 性别表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0721);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0706);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.IN&&expressionKeyEnum!=ExpressionKeyEnum.NOT_IN){
                     log.info("折扣参与条件参数顾客属性(性别)验证 性别表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0721);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0706);
                     return false;
                 }
                 if(sexList==null){
                     log.info("折扣参与条件参数顾客属性(性别)验证 性别表达式key对应的性别数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0722);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0707);
                     return false;
                 }
                 for(String sex:sexList){
                     if(!MemberUtils.MEMBER_SEX_WOMAN.equals(sex)&&!MemberUtils.MEMBER_SEX_MAN.equals(sex)&&!MemberUtils.MEMBER_SEX_OTHER.equals(sex)){
                         log.info("折扣参与条件参数顾客属性(生日)验证 生日表达式key对应的生日数据不合规范");
-                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0723);
+                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0708);
                         return false;
                     }
                 }
@@ -219,24 +219,24 @@ public class JoinConditionMemberUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数顾客属性(年龄)验证 年龄表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0730);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0709);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.IN&&expressionKeyEnum!=ExpressionKeyEnum.NOT_IN){
                     log.info("折扣参与条件参数顾客属性(年龄)验证 年龄表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0730);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0709);
                     return false;
                 }
                 List<Integer> ageList = joinConditionMember.getAge().get(expression);
                 if(ageList==null){
                     log.info("折扣参与条件参数顾客属性(年龄)验证 年龄表达式key对应的年龄数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0731);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0710);
                     return false;
                 }
                 for(Integer age:ageList){
                     if(MemberUtils.MEMBER_AGE_MIN.intValue()>age.intValue()||age.intValue()>MemberUtils.MEMBER_AGE_MAX){
                         log.info("折扣参与条件参数顾客属性(年龄)验证 年龄表达式key对应的年龄数据不合规范");
-                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0732);
+                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0711);
                         return false;
                     }
                 }
@@ -268,23 +268,23 @@ public class JoinConditionMemberUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数顾客属性(生日)验证 生日表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0740);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0712);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.IN&&expressionKeyEnum!=ExpressionKeyEnum.NOT_IN){
                     log.info("折扣参与条件参数顾客属性(生日)验证 生日表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0740);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0712);
                     return false;
                 }
                 if(birthdayList==null){
                     log.info("折扣参与条件参数顾客属性(生日)验证 生日表达式key对应的条码数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0741);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0713);
                     return false;
                 }
                 for(String birthday:birthdayList){
                     if(DateUtils.convertStringTODate(DateUtils.datetimeUtcFmt(),birthday)==null){
                         log.info("折扣参与条件参数顾客属性(生日)验证 生日表达式key对应的生日数据不合规范");
-                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0742);
+                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0714);
                         return false;
                     }
                 }

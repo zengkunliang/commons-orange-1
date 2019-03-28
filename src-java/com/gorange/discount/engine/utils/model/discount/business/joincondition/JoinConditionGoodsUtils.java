@@ -115,25 +115,25 @@ public class JoinConditionGoodsUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数商品属性(条码)验证 条码表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0810);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0803);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.IN&&expressionKeyEnum!=ExpressionKeyEnum.NOT_IN){
                     log.info("折扣参与条件参数商品属性(条码)验证 条码表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0810);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0803);
                     return false;
                 }
                 List<String> barcodeList = joinConditionGoods.getBarcode().get(expression);
                 if(barcodeList==null){
                     log.info("折扣参与条件参数商品属性(条码)验证 条码表达式key对应的条码数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0811);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0804);
                     return false;
                 }
                 for(String barcode:barcodeList){
                     int barcodeLength = StringUtils.defaultString(barcode).length();
                     if(GoodsUtils.BARCODE_MIN_LENGTH>barcodeLength||barcodeLength>GoodsUtils.BARCODE_MAX_LENGTH){
                         log.info("折扣参与条件参数商品属性(条码)验证 条码表达式key对应的条码数据不合规范");
-                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0812);
+                        businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0805);
                         return false;
                     }
                 }
@@ -169,22 +169,22 @@ public class JoinConditionGoodsUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数商品属性(金额)验证 最小金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0820);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0806);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.GR&&expressionKeyEnum!=ExpressionKeyEnum.GR_AND_EQ){
                     log.info("折扣参与条件参数商品属性(金额)验证 最小金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0820);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0806);
                     return false;
                 }
                 if(minPrice==null){
                     log.info("折扣参与条件参数商品属性(金额)验证 最小金额表达式key对应的金额数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0821);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0807);
                     return false;
                 }
                 if(minPrice<=0){
                     log.info("折扣参与条件参数商品属性(金额)验证 最小金额表达式key对应的金额数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0822);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0808);
                     return false;
                 }
             }
@@ -198,29 +198,29 @@ public class JoinConditionGoodsUtils {
                 ExpressionKeyEnum expressionKeyEnum = ExpressionKeyEnum.getExpressionKeyEnum(expression);
                 if(expressionKeyEnum==null){
                     log.info("折扣参与条件参数商品属性(金额)验证 最大金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0830);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0809);
                     return false;
                 }
                 if(expressionKeyEnum!=ExpressionKeyEnum.LE&&expressionKeyEnum!=ExpressionKeyEnum.LE_AND_EQ){
                     log.info("折扣参与条件参数商品属性(金额)验证 最大金额表达式key数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0830);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0809);
                     return false;
                 }
                 if(maxPrice==null){
                     log.info("折扣参与条件参数商品属性(金额)验证 最大金额表达式key对应的金额数据不可为null");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0831);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0810);
                     return false;
                 }
                 if(maxPrice<=0){
                     log.info("折扣参与条件参数商品属性(金额)验证 最小金额表达式key对应的金额数据不合规范");
-                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0832);
+                    businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0811);
                     return false;
                 }
             }
         }
         if(minPrice!=null&&maxPrice!=null&&minPrice>maxPrice){
             log.info("折扣参与条件参数商品属性(金额)验证 最小金额不得大于最大金额");
-            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0833);
+            businessMessage.setBusinessMessageEnum(BusinessMessageEnum.MESSAGE_0812);
             return false;
         }
         return true;
